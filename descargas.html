@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Supreme Xits - Descargas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --neon-green: #00ff88;
+            --neon-glow: rgba(0, 255, 136, 0.4);
+            --glass: rgba(10, 15, 15, 0.98);
+            --font-futuristic: 'Orbitron', sans-serif;
+        }
+
+        /* Transición de entrada */
+        body { 
+            opacity: 0; transition: opacity 0.4s ease-in-out;
+            background-color: var(--bg-dark); color: #fff; 
+            font-family: 'Rajdhani', sans-serif; width: 100%; 
+            min-height: 100vh; overflow-x: hidden; margin: 0;
+        }
+        body.loaded { opacity: 1; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+        
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+        /* --- HEADER PROFESIONAL --- */
+        header {
+            position: sticky; top: 15px; margin: 15px; height: 60px;
+            background: var(--glass); backdrop-filter: blur(20px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; border: 1px solid var(--neon-green);
+            border-radius: 20px; z-index: 1000; box-shadow: 0 0 15px var(--neon-glow);
+        }
+
+        .back-btn {
+            color: var(--neon-green); font-size: 20px; cursor: pointer;
+            transition: 0.3s; display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%;
+        }
+        .back-btn:active { background: rgba(0, 255, 136, 0.2); transform: scale(0.9); }
+
+        .logo-text { font-family: var(--font-futuristic); font-size: 14px; color: var(--neon-green); text-shadow: 0 0 10px var(--neon-glow); letter-spacing: 2px; }
+        
+        .balance-pill { background: rgba(0,255,136,0.1); border: 1px solid var(--neon-green); padding: 6px 12px; border-radius: 30px; display: flex; align-items: center; gap: 8px; }
+        .balance-pill span { font-family: var(--font-futuristic); font-size: 10px; color: var(--neon-green); }
+
+        /* --- NOTIFICACIONES GLOBAL --- */
+        #notification-box {
+            position: fixed; top: 85px; right: 20px; z-index: 5000;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .toast-msg {
+            background: rgba(5, 5, 5, 0.95); border-left: 4px solid var(--neon-green);
+            color: #fff; padding: 15px 20px; border-radius: 8px;
+            font-size: 11px; font-family: var(--font-futuristic);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8); border: 1px solid rgba(0,255,136,0.1);
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        /* --- CONTENIDO --- */
+        .container { position: relative; max-width: 1000px; margin: 0 auto; padding: 20px; z-index: 5; }
+        .section-info { margin-bottom: 30px; text-align: center; }
+        .section-info h2 { font-family: var(--font-futuristic); font-size: 12px; color: var(--neon-green); letter-spacing: 3px; text-transform: uppercase; }
+
+        .download-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
+
+        .dl-card {
+            background: #080808; border-radius: 22px; overflow: hidden; position: relative;
+            border: 1px solid rgba(0, 255, 136, 0.15); transition: 0.3s;
+        }
+        .img-container { width: 100%; height: 170px; overflow: hidden; }
+        .img-container img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        .dl-info { padding: 20px; border-top: 1px solid rgba(0, 255, 136, 0.1); }
+        .dl-title { font-family: var(--font-futuristic); font-size: 13px; color: var(--neon-green); margin-bottom: 8px; }
+        .dl-desc { font-size: 12px; color: #888; line-height: 1.4; margin-bottom: 15px; }
+
+        .btn-dl {
+            width: 100%; background: transparent; border: 1px solid var(--neon-green);
+            color: var(--neon-green); padding: 12px; border-radius: 12px;
+            font-family: var(--font-futuristic); font-size: 10px; cursor: pointer; transition: 0.3s; font-weight: bold;
+        }
+        .btn-dl:active { background: var(--neon-green); color: #000; }
+
+        /* MODAL */
+        .supreme-modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            display: none; align-items: center; justify-content: center;
+            z-index: 3000; padding: 20px; backdrop-filter: blur(8px);
+        }
+        .modal-content {
+            background: #050505; border: 2px solid var(--neon-green);
+            width: 100%; max-width: 350px; border-radius: 25px; padding: 30px; text-align: center;
+        }
+
+        @keyframes slideIn { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body onload="document.body.classList.add('loaded')">
+
+    <div id="particles-js"></div>
+    <div id="notification-box"></div>
+
+    <header>
+        <div class="back-btn" onclick="smoothNav('dashboard.html')">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="logo-text">DESCARGAS</div>
+        <div class="balance-pill">
+            <i class="fas fa-wallet" style="color: var(--neon-green); font-size: 12px;"></i>
+            <span id="user-balance">$0.00</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-info"><h2>CENTRO DE DESCARGAS</h2></div>
+        <div id="loading-status" style="text-align: center; color: var(--neon-green); font-size: 10px; font-family: 'Orbitron';">SINCRO...</div>
+        <div class="download-grid" id="supreme-dl-grid"></div>
+    </div>
+
+    <div class="supreme-modal" id="modal-dl">
+        <div class="modal-content">
+            <div style="font-size: 40px; color: var(--neon-green); margin-bottom: 15px;"><i class="fas fa-box-open"></i></div>
+            <h3 id="m-name" style="font-family: Orbitron; font-size: 16px; color: var(--neon-green); margin-bottom: 10px;">PROYECTO</h3>
+            <p id="m-spec" style="font-size: 12px; color: #888; margin-bottom: 25px;"></p>
+            <button class="btn-dl" id="final-btn" style="background: var(--neon-green); color: #000;">CONFIRMAR ACCESO</button>
+            <button class="btn-dl" onclick="closeModal()" style="border-color: #ff3c3c; color: #ff3c3c; margin-top: 10px;">CANCELAR</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, onValue, onChildAdded } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCfvk6-vE8iyP-p-RMGBlqmdggjLg1lY7I", 
+            authDomain: "sakuritamodz-web.firebaseapp.com", 
+            projectId: "sakuritamodz-web", 
+            databaseURL: "https://sakuritamodz-web-default-rtdb.firebaseio.com", 
+            appId: "1:1025154676126:web:caa752670a1be2759d528f" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const dbRT = getDatabase(app);
+        const dbFS = getFirestore(app);
+
+        // --- SEGURIDAD (ANTI-BAN) Y SALDO ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                onSnapshot(doc(dbFS, "users", user.uid), (snap) => {
+                    if(!snap.exists() || snap.data().status === 'banned' || snap.data().status === 'expulsado') {
+                        signOut(auth).then(() => location.href = "login.html");
+                    } else {
+                        document.getElementById('user-balance').innerText = `$${(snap.data().balance || 0).toFixed(2)}`;
+                    }
+                });
+            } else { location.href = "login.html"; }
+        });
+
+        // --- NOTIFICACIONES GLOBALES EN TIEMPO REAL ---
+        onChildAdded(ref(dbRT, 'notifications/global'), (snap) => {
+            const data = snap.val();
+            const box = document.getElementById('notification-box');
+            const toast = document.createElement('div');
+            toast.className = 'toast-msg';
+            toast.innerHTML = `<i class="fas fa-bell" style="margin-right:10px; color:var(--neon-green)"></i> ${data.text}`;
+            box.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 7000);
+        });
+
+        // --- CARGA DE CARDS ---
+        onValue(ref(dbRT, 'downloads'), (snap) => {
+            const grid = document.getElementById('supreme-dl-grid');
+            grid.innerHTML = '';
+            document.getElementById('loading-status').style.display = 'none';
+            snap.forEach(child => {
+                const d = child.val();
+                grid.innerHTML += `
+                    <div class="dl-card">
+                        <div class="img-container"><img src="${d.image}"></div>
+                        <div class="dl-info">
+                            <h4 class="dl-title">${d.name.toUpperCase()}</h4>
+                            <p class="dl-desc">${d.description || 'Optimización de alto rendimiento.'}</p>
+                            <button class="btn-dl" onclick="openDownload('${d.name}', '${d.url}', '${d.description}')">OBTENER MÓDULO</button>
+                        </div>
+                    </div>`;
+            });
+        });
+
+        // --- NAVEGACIÓN Y MODAL ---
+        window.smoothNav = (url) => {
+            document.body.style.opacity = '0';
+            setTimeout(() => { location.href = url; }, 400);
+        };
+
+        window.openDownload = (n, u, d) => {
+            document.getElementById('m-name').innerText = n;
+            document.getElementById('m-spec').innerText = d || "Acceso verificado.";
+            document.getElementById('modal-dl').style.display = 'flex';
+            document.getElementById('final-btn').onclick = () => {
+                window.open(u, '_blank');
+                closeModal();
+            };
+        };
+
+        window.closeModal = () => document.getElementById('modal-dl').style.display = 'none';
+
+        particlesJS("particles-js", { "particles": { "number": { "value": 30 }, "color": { "value": "#00ff88" }, "opacity": { "value": 0.2 }, "size": { "value": 1.2 }, "line_linked": { "enable": true, "distance": 120, "color": "#00ff88", "opacity": 0.1 }, "move": { "enable": true, "speed": 0.5 } } });
+    </script>
+</body>
+</html>
