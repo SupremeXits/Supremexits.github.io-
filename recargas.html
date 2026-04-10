@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Recargas Premium - Supreme Xits</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root { --neon: #00ff88; --bg-card: #0c0c0c; --grad: linear-gradient(90deg, #f093fb 0%, #f5576c 100%); }
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        body { background: #000; color: #fff; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
+        #particles-js { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+        .container { position: relative; z-index: 10; padding: 20px; max-width: 450px; margin: 0 auto; }
+
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-top: 10px; }
+        .btn-back { color: var(--neon); background: rgba(0, 255, 136, 0.05); border: 1px solid var(--neon); padding: 8px 15px; border-radius: 12px; font-family: 'Orbitron'; font-size: 10px; cursor: pointer; transition: 0.3s; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .btn-back:active { transform: scale(0.9); background: var(--neon); color: #000; }
+        
+        .user-balance-top { background: #111; border: 1px solid #222; padding: 8px 15px; border-radius: 12px; display: flex; align-items: center; gap: 8px; }
+        .user-balance-top i { color: var(--neon); font-size: 12px; }
+        .user-balance-top span { font-family: 'Orbitron'; font-size: 11px; color: #fff; }
+
+        .header-title { font-family: 'Orbitron'; font-size: 14px; color: var(--neon); text-align: center; margin: 25px 0; letter-spacing: 2px; }
+
+        .card { background: rgba(255,255,255,0.03); border: 1px solid #1a1a1a; border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 12px; cursor: pointer; transition: 0.3s; }
+        .card:active { transform: scale(0.95); border-color: var(--neon); }
+        .card img { width: 45px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(8px); z-index: 5000; display: none; align-items: center; justify-content: center; }
+        .modal-card { background: var(--bg-card); width: 92%; max-width: 380px; border-radius: 30px; border: 1px solid #222; overflow: hidden; animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .input-box { background: #050505; border: 2px solid #222; padding: 18px; border-radius: 15px; width: 100%; color: #fff; font-size: 20px; outline: none; font-family: 'Orbitron'; text-align: center; transition: 0.3s; }
+        .input-box:focus { border-color: var(--neon); box-shadow: 0 0 15px rgba(0,255,136,0.1); }
+
+        .conv-box { display: none; border: 2px solid var(--neon); border-radius: 20px; padding: 22px; background: rgba(0,255,136,0.02); margin: 25px 0; position: relative; }
+        .conv-box::before { content: ""; position: absolute; top: -2px; left: 20px; right: 20px; height: 2px; background: var(--neon); box-shadow: 0 0 15px var(--neon); }
+        .conv-flex { display: flex; justify-content: space-between; align-items: center; }
+        
+        .btn-continue { background: var(--grad); color: #fff; border: none; width: 100%; padding: 20px; border-radius: 20px; font-family: 'Orbitron'; font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(245, 87, 108, 0.2); font-size: 16px; }
+        .section { display: none; }
+        .active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="container">
+        <div class="top-nav">
+            <div class="btn-back" onclick="location.href='dashboard.html'">
+                <i class="fas fa-arrow-left"></i> VOLVER
+            </div>
+            <div class="user-balance-top">
+                <i class="fas fa-wallet"></i>
+                <span id="top-balance">$0.00</span>
+            </div>
+        </div>
+
+        <div id="view-countries" class="section active">
+            <h2 class="header-title"><i class="fas fa-globe-americas"></i> SELECCIONA TU PAÍS</h2>
+            <div id="country-list"></div>
+        </div>
+
+        <div id="view-methods" class="section">
+            <h2 class="header-title"><i class="fas fa-wallet"></i> MÉTODO DE PAGO</h2>
+            <div id="method-list"></div>
+            <p onclick="location.reload()" style="text-align:center; color:#555; margin-top:30px; cursor:pointer; font-size:12px; font-family:'Orbitron';">← CAMBIAR PAÍS</p>
+        </div>
+
+        <div id="view-ticket" class="section">
+            <h2 class="header-title"><i class="fas fa-file-invoice-dollar"></i> FINALIZAR REPORTE</h2>
+            <div style="background:#111; padding:20px; border-radius:20px; border-left:4px solid var(--neon); margin-bottom:20px; font-size:14px; line-height:1.6;">
+                <b style="color:var(--neon); font-family:'Orbitron'; font-size:11px;">INSTRUCCIONES:</b><br>
+                <p id="pago-instrucciones" style="color:#bbb; white-space: pre-line; margin-top:10px;"></p>
+            </div>
+            <input type="text" id="t-ref" class="input-box" placeholder="N° de Referencia / ID" style="font-size:14px; margin-bottom:15px; text-align: left;">
+            
+            <div style="border:2px dashed #333; padding:40px; border-radius:25px; text-align:center; background:rgba(255,255,255,0.01);" onclick="document.getElementById('f-in').click()">
+                <i class="fas fa-cloud-upload-alt" style="font-size:30px; color:var(--neon); margin-bottom:10px;"></i><br>
+                <span style="color:#666; font-size:12px; font-family:'Orbitron';">SUBIR COMPROBANTE</span>
+                <img id="prev" style="width:100%; margin-top:20px; display:none; border-radius:15px; border:1px solid #333;">
+            </div>
+            
+            <input type="file" id="f-in" style="display:none" accept="image/*" onchange="preview(this)">
+            <button class="btn-continue" onclick="sendReport()" style="margin-top:25px;">ENVIAR REPORTE AHORA</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="m-calc">
+        <div class="modal-card">
+            <div style="padding:15px 20px; border-bottom:1px solid #222; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:10px; font-family:'Orbitron'; color:#555; letter-spacing:1px;">CALCULADORA DE RECARGA</span>
+                <i class="fas fa-times" onclick="closeM()" style="cursor:pointer; color:#444;"></i>
+            </div>
+            
+            <div style="padding:30px;">
+                <div style="display:flex; align-items:center; gap:15px; margin-bottom:30px; background:rgba(255,255,255,0.02); padding:15px; border-radius:20px; border:1px solid #1a1a1a;">
+                    <img id="m-img" src="" style="width:50px; border-radius:10px;">
+                    <div>
+                        <h3 id="m-name" style="font-family:'Orbitron'; font-size:18px;">---</h3>
+                        <p id="m-tasa" style="color:var(--neon); font-size:12px; font-weight:bold;"></p>
+                    </div>
+                </div>
+
+                <label style="font-size:10px; color:#555; font-family:'Orbitron'; margin-bottom:10px; display:block; margin-left:5px;">CANTIDAD EN USD:</label>
+                <input type="number" id="inp-usd" class="input-box" placeholder="0.00" oninput="calc()">
+                
+                <div class="conv-box" id="c-res">
+                    <div class="conv-flex">
+                        <div style="text-align:left">
+                            <small style="color:#666; display:block; margin-bottom:5px; font-size:9px; font-family:'Orbitron';">PAGAS</small>
+                            <h4 id="r-local" style="font-family:'Orbitron'; font-size:22px;">0</h4>
+                            <small id="r-sym" style="color:#444; font-weight:bold;"></small>
+                        </div>
+                        <div style="background:rgba(0,255,136,0.1); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;">
+                            <i class="fas fa-exchange-alt" style="color:var(--neon); font-size:16px;"></i>
+                        </div>
+                        <div style="text-align:right">
+                            <small style="color:#666; display:block; margin-bottom:5px; font-size:9px; font-family:'Orbitron';">RECIBES</small>
+                            <h4 id="r-usd" style="font-family:'Orbitron'; color:var(--neon); font-size:22px;">$0.00</h4>
+                            <small style="color:#444; font-weight:bold;">USD</small>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-continue" onclick="goNext()" style="margin-top:10px;">CONTINUAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const conf = { 
+            apiKey: "AIzaSyCfvk6-vE8iyP-p-RMGBlqmdggjLg1lY7I",
+            authDomain: "sakuritamodz-web.firebaseapp.com",
+            projectId: "sakuritamodz-web",
+            databaseURL: "https://sakuritamodz-web-default-rtdb.firebaseio.com",
+            appId: "1:1025154676126:web:caa752670a1be2759d528f" 
+        };
+        const app = initializeApp(conf);
+        const auth = getAuth(app);
+        const dbRT = getDatabase(app);
+        const dbFS = getFirestore(app);
+
+        let countries = [];
+        let selC = null;
+        let selM = null;
+        let b64 = "";
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                onSnapshot(doc(dbFS, "users", user.uid), (snap) => {
+                    if(snap.exists()){
+                        const bal = snap.data().balance || 0;
+                        document.getElementById('top-balance').innerText = `$${parseFloat(bal).toFixed(2)}`;
+                    }
+                });
+            }
+        });
+
+        onValue(ref(dbRT, 'configuracion/paises'), (snap) => {
+            countries = snap.val() || [];
+            const list = document.getElementById('country-list');
+            list.innerHTML = "";
+            countries.forEach((c, i) => {
+                list.innerHTML += `
+                    <div class="card" onclick="openM(${i})">
+                        <img src="${c.flag}">
+                        <div style="flex:1">
+                            <b style="font-size:16px;">${c.nombre}</b><br>
+                            <small style="color:#555; font-size:11px;">Recarga rápida en moneda local</small>
+                        </div>
+                        <i class="fas fa-chevron-right" style="color:#222; font-size:12px;"></i>
+                    </div>`;
+            });
+        });
+
+        window.openM = (i) => {
+            selC = countries[i];
+            document.getElementById('m-img').src = selC.flag;
+            document.getElementById('m-name').innerText = selC.nombre;
+            document.getElementById('m-tasa').innerText = `Tasa: 1$ = ${selC.tasa}`;
+            document.getElementById('inp-usd').value = "";
+            document.getElementById('c-res').style.display = 'none';
+            document.getElementById('m-calc').style.display = 'flex';
+        };
+
+        window.closeM = () => document.getElementById('m-calc').style.display = 'none';
+
+        window.calc = () => {
+            const val = document.getElementById('inp-usd').value;
+            const box = document.getElementById('c-res');
+            if(val > 0){
+                box.style.display = 'block';
+                document.getElementById('r-local').innerText = (val * selC.tasa).toLocaleString();
+                document.getElementById('r-sym').innerText = selC.nombre;
+                document.getElementById('r-usd').innerText = `$${parseFloat(val).toFixed(2)}`;
+            } else box.style.display = 'none';
+        };
+
+        window.goNext = () => {
+            if(!document.getElementById('inp-usd').value) return;
+            closeM();
+            const mList = document.getElementById('method-list');
+            mList.innerHTML = "";
+            
+            selC.metodos.forEach((m, idx) => {
+                let notePaypal = "";
+                let iconClass = "fa-university";
+
+                if (m.nombre.toLowerCase().includes("paypal")) {
+                    iconClass = "fa-brands fa-paypal";
+                    notePaypal = `
+                        <div style="margin-top:10px; padding:10px; background:rgba(255,193,7,0.05); border:1px solid rgba(255,193,7,0.3); border-radius:10px;">
+                            <p style="color:#ffc107; font-size:10px; font-family:'Rajdhani'; line-height:1.2;">
+                                <i class="fas fa-clock"></i> Retención PayPal: Puede demorar 1-3 días en cuentas nuevas, sino es inmediata.
+                            </p>
+                        </div>`;
+                }
+
+                mList.innerHTML += `
+                    <div class="card" onclick="openFinalStep(${idx})" style="flex-direction:column; align-items:flex-start;">
+                        <div style="display:flex; align-items:center; gap:15px; width:100%;">
+                            <div style="background:rgba(0,255,136,0.1); width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center;">
+                                <i class="fas ${iconClass}" style="color:var(--neon)"></i>
+                            </div>
+                            <div style="flex:1">
+                                <b style="font-size:15px;">${m.nombre}</b><br>
+                                <small style="color:#555; font-size:11px;">Acreditación segura</small>
+                            </div>
+                        </div>
+                        ${notePaypal}
+                    </div>`;
+            });
+            document.getElementById('view-countries').classList.remove('active');
+            document.getElementById('view-methods').classList.add('active');
+        };
+
+        window.openFinalStep = (mIdx) => {
+            selM = selC.metodos[mIdx];
+            document.getElementById('view-methods').classList.remove('active');
+            document.getElementById('view-ticket').classList.add('active');
+            document.getElementById('pago-instrucciones').innerText = selM.info;
+        };
+
+        window.preview = (input) => {
+            const reader = new FileReader();
+            reader.onload = (e) => { 
+                b64 = e.target.result;
+                document.getElementById('prev').src = b64;
+                document.getElementById('prev').style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        };
+
+        window.sendReport = () => {
+            const refNum = document.getElementById('t-ref').value;
+            if(!refNum || !b64) return alert("Por favor, ingresa la referencia y la foto.");
+            
+            const ticketRef = push(ref(dbRT, 'tickets_recarga'));
+            set(ticketRef, {
+                uid: auth.currentUser.uid,
+                monto: document.getElementById('inp-usd').value,
+                pais: selC.nombre,
+                metodo: selM.nombre,
+                referencia: refNum,
+                img: b64,
+                estado: "pendiente",
+                fecha: Date.now()
+            }).then(() => { 
+                alert("¡Reporte enviado! Espera la aprobación."); 
+                location.reload(); 
+            });
+        };
+
+        particlesJS("particles-js", { "particles": { "number": { "value": 40 }, "color": { "value": "#00ff88" }, "shape": { "type": "circle" }, "opacity": { "value": 0.2 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00ff88", "opacity": 0.1, "width": 1 }, "move": { "enable": true, "speed": 1 } } });
+    </script>
+</body>
+</html>
