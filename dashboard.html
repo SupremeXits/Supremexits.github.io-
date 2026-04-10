@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -172,9 +173,9 @@
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue, get, remove, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, onValue, get, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, updateDoc, collection, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, updateDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyCfvk6-vE8iyP-p-RMGBlqmdggjLg1lY7I", 
@@ -190,7 +191,6 @@
         const auth = getAuth(app);
 
         let userBalance = 0;
-        let userData = {}; // Guardar info del usuario localmente
 
         // --- TRADUCTOR ---
         const i18n = {
@@ -211,8 +211,7 @@
             if (user) {
                 onSnapshot(doc(dbFS, "users", user.uid), (snap) => {
                     if(snap.exists()){
-                        userData = snap.data();
-                        userBalance = userData.balance || 0;
+                        userBalance = snap.data().balance || 0;
                         document.getElementById('user-balance').innerText = `$${parseFloat(userBalance).toFixed(2)}`;
                     }
                 });
@@ -237,7 +236,7 @@
             document.getElementById('modal-buy').style.display = 'flex';
         };
 
-        // --- CONFIRMACIÓN VISUAL ---
+        // --- CONFIRMACIÓN VISUAL (MEJORADO) ---
         window.showConfirmModal = (name, price, id, path) => {
             const lang = document.getElementById('lang-selector').value;
             const modalContent = document.getElementById('modal-content');
@@ -271,10 +270,8 @@
         window.executePurchase = async (id, name, price, path) => {
             const p = parseFloat(price); closeModal();
             try {
-                const user = auth.currentUser;
                 let entrega = "TICKET-" + Math.random().toString(36).substr(2, 9).toUpperCase();
                 const isKey = path.includes('keys');
-                
                 if(isKey) {
                     const sel = document.getElementById(`select-${id}`);
                     const timeTag = sel.options[sel.selectedIndex].getAttribute('data-time');
@@ -289,27 +286,8 @@
                     entrega = keys[firstId];
                     await remove(ref(dbRT, `stock_keys/${id}/${timeTag}/${firstId}`));
                 }
-
-                // PAYLOAD PARA TICKETS (Solo Realtime)
-                const ticketData = {
-                    uid: user.uid,
-                    usuario: userData.username || userData.nombre || "Sin Nombre",
-                    correo: userData.correo || user.email,
-                    telefono: userData.telefono || "Sin Tel",
-                    item: name,
-                    precio: p,
-                    entrega: entrega,
-                    fecha: new Date().toLocaleString()
-                };
-
-                // Crear ticket solo en Realtime si es Proyecto/Servicio/Cuenta
-                if(!isKey) {
-                    await set(ref(dbRT, `tickets_pendientes/${entrega}`), ticketData);
-                }
-
-                await updateDoc(doc(dbFS, "users", user.uid), { balance: userBalance - p });
-                await addDoc(collection(dbFS, "compras"), ticketData); // Historial general en FS
-                
+                await updateDoc(doc(dbFS, "users", auth.currentUser.uid), { balance: userBalance - p });
+                await addDoc(collection(dbFS, "compras"), { uid: auth.currentUser.uid, item: name, precio: p, entrega: entrega, fecha: Date.now() });
                 showSuccessModal(entrega);
             } catch(e) { showErrorModal("SISTEMA", "Error al procesar. Intente de nuevo."); }
         };
