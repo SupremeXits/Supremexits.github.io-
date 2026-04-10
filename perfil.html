@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Perfil Supreme | V33.5</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --neon-green: #00ff88;
+            --neon-glow: rgba(0, 255, 136, 0.4);
+            --card-bg: rgba(8, 8, 8, 0.98);
+            --font-futuristic: 'Orbitron', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg-dark); color: #fff; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; min-height: 100vh; }
+        
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; }
+        .content { position: relative; z-index: 10; padding: 25px; max-width: 450px; margin: 0 auto; padding-top: 15px; }
+
+        /* BOTÓN VOLVER AJUSTADO */
+        .nav-top { width: 100%; display: flex; margin-bottom: 20px; }
+        .btn-volver {
+            background: transparent; border: 1px solid var(--neon-green);
+            color: var(--neon-green); font-family: var(--font-futuristic); font-size: 10px;
+            padding: 8px 20px; border-radius: 5px; cursor: pointer;
+            box-shadow: 0 0 10px var(--neon-glow); text-transform: uppercase;
+            font-weight: 900; transition: 0.3s;
+        }
+        .btn-volver:active { background: var(--neon-green); color: #000; }
+
+        /* HEADER PERFIL */
+        .profile-header { text-align: center; margin-bottom: 25px; }
+        .avatar-container {
+            width: 100px; height: 100px; margin: 0 auto 15px;
+            border-radius: 50%; border: 2px solid var(--neon-green);
+            padding: 4px; box-shadow: 0 0 20px var(--neon-glow);
+            position: relative; background: #000;
+        }
+        .avatar-container img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .role-badge {
+            position: absolute; bottom: 0; right: 0; background: var(--neon-green);
+            color: #000; font-family: var(--font-futuristic); font-size: 7px;
+            padding: 3px 6px; border-radius: 3px; font-weight: 900;
+        }
+
+        .username { font-family: var(--font-futuristic); font-size: 18px; color: #fff; text-shadow: 0 0 10px var(--neon-glow); text-transform: uppercase; }
+        .balance-text { color: var(--neon-green); font-size: 12px; font-weight: 700; margin-top: 5px; letter-spacing: 2px; }
+
+        /* CARDS */
+        .supreme-card {
+            background: var(--card-bg); border: 1px solid #151515; border-radius: 15px;
+            padding: 18px; margin-bottom: 15px; border-left: 3px solid var(--neon-green);
+        }
+        .card-title { font-family: var(--font-futuristic); font-size: 10px; color: var(--neon-green); margin-bottom: 15px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+
+        .data-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .data-label { font-size: 10px; color: #444; text-transform: uppercase; font-family: var(--font-futuristic); }
+        .data-value { font-size: 13px; color: #ddd; font-weight: 600; }
+
+        /* SECCIÓN KEYS COMPRADAS */
+        .keys-grid { display: flex; flex-direction: column; gap: 10px; }
+        .key-mini-card {
+            background: rgba(255,255,255,0.02); border: 1px solid #1a1a1a;
+            padding: 10px; border-radius: 10px; display: flex; align-items: center; gap: 12px;
+        }
+        .key-mini-card i { color: var(--neon-green); font-size: 14px; filter: drop-shadow(0 0 5px var(--neon-green)); }
+        .key-name { font-size: 12px; font-weight: 600; color: #eee; flex: 1; }
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--neon-green); box-shadow: 0 0 5px var(--neon-green); }
+
+        /* NUEVA LISTA DE SEGURIDAD */
+        .sec-item {
+            background: rgba(255,255,255,0.03); border: 1px solid #111;
+            padding: 12px; border-radius: 8px; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .sec-item i { color: var(--neon-green); font-size: 14px; }
+        .sec-data { display: flex; flex-direction: column; }
+        .sec-device { font-size: 11px; font-weight: 700; color: #fff; font-family: var(--font-futuristic); }
+        .sec-meta { font-size: 10px; color: #555; text-transform: uppercase; }
+
+        /* BOTÓN LOGOUT */
+        .btn-logout {
+            width: 100%; padding: 14px; border-radius: 10px; border: none;
+            background: #ff3131; color: #fff; font-family: var(--font-futuristic);
+            font-size: 10px; cursor: pointer; margin-top: 10px; font-weight: 900; box-shadow: 0 0 15px rgba(255, 49, 49, 0.3);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .content { animation: fadeIn 0.4s ease-out; }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <div class="content">
+        <div class="nav-top">
+            <button class="btn-volver" onclick="window.location.href='dashboard.html'">VOLVER</button>
+        </div>
+
+        <div class="profile-header">
+            <div class="avatar-container">
+                <img id="u-photo" src="https://via.placeholder.com/150" alt="Supreme User">
+                <span class="role-badge" id="u-role">MEMBER</span>
+            </div>
+            <h2 class="username" id="u-name">CARGANDO...</h2>
+            <p class="balance-text">SALDO: <span id="u-balance">$0.00</span></p>
+        </div>
+
+        <div class="supreme-card">
+            <div class="card-title"><i class="fas fa-user-circle"></i> PERFIL DE USUARIO</div>
+            <div class="data-row"><span class="data-label">Email</span><span class="data-value" id="u-email">...</span></div>
+            <div class="data-row"><span class="data-label">WhatsApp</span><span class="data-value" id="u-phone">...</span></div>
+        </div>
+
+        <div class="supreme-card">
+            <div class="card-title"><i class="fas fa-key"></i> MIS KEYS ADQUIRIDAS</div>
+            <div id="keys-container" class="keys-grid">
+                <p style="font-size: 10px; color: #333; text-align: center;">Buscando licencias...</p>
+            </div>
+        </div>
+
+        <div class="supreme-card">
+            <div class="card-title"><i class="fas fa-shield-virus"></i> SEGURIDAD</div>
+            <div id="security-list">
+                <div class="sec-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <div class="sec-data">
+                        <span class="sec-device" id="u-device">SAMSUNG A20</span>
+                        <span class="sec-meta"><span id="u-time">--:--</span> • <span id="u-country">VENEZUELA</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-logout" onclick="logout()">CERRAR SESIÓN</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, collection, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCfvk6-vE8iyP-p-RMGBlqmdggjLg1lY7I", 
+            authDomain: "sakuritamodz-web.firebaseapp.com", 
+            projectId: "sakuritamodz-web", 
+            appId: "1:1025154676126:web:caa752670a1be2759d528f" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const dbFS = getFirestore(app);
+
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 130, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#00ff88" },
+                "opacity": { "value": 0.9, "random": true },
+                "size": { "value": 1.2, "random": true },
+                "line_linked": { "enable": true, "distance": 90, "color": "#00ff88", "opacity": 0.2, "width": 1 },
+                "move": { "enable": true, "speed": 3, "direction": "none", "random": true, "out_mode": "out" }
+            }
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const docRef = doc(dbFS, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('u-name').innerText = data.username || "USER";
+                    document.getElementById('u-email').innerText = data.email || "";
+                    document.getElementById('u-phone').innerText = data.whatsapp || "N/A";
+                    document.getElementById('u-balance').innerText = `$${data.balance || "0.00"}`;
+                    document.getElementById('u-role').innerText = (data.role || "member").toUpperCase();
+                    if(data.photo) document.getElementById('u-photo').src = data.photo;
+                    
+                    // Ajuste de Seguridad: Mostramos modelo, hora y país
+                    const device = data.last_device || "DESCONOCIDO";
+                    const time = data.last_login ? data.last_login.split(' ')[1] : "--:--"; // Extrae la hora del string
+                    const country = data.country || "VENEZUELA"; // Si guardas el país en el login
+                    
+                    document.getElementById('u-device').innerText = device.toUpperCase();
+                    document.getElementById('u-time').innerText = time;
+                    document.getElementById('u-country').innerText = country.toUpperCase();
+                    
+                    loadKeys(user.uid);
+                }
+            } else { window.location.href = "index.html"; }
+        });
+
+        async function loadKeys(uid) {
+            const container = document.getElementById('keys-container');
+            const q = query(collection(dbFS, "transactions"), where("uid", "==", uid), limit(4));
+            const snap = await getDocs(q);
+            if(!snap.empty) {
+                container.innerHTML = '';
+                snap.forEach(d => {
+                    const item = d.data();
+                    container.innerHTML += `
+                        <div class="key-mini-card">
+                            <i class="fas fa-key"></i>
+                            <span class="key-name">${item.product || 'Key Supreme'}</span>
+                            <div class="status-dot"></div>
+                        </div>`;
+                });
+            } else {
+                container.innerHTML = '<p style="font-size: 10px; color: #222; text-align: center;">Sin llaves activas</p>';
+            }
+        }
+
+        window.logout = () => { signOut(auth).then(() => { window.location.href = "index.html"; }); };
+    </script>
+</body>
+</html>
