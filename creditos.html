@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Supreme Xits V33 - Full Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --neon-green: #00ff88;
+            --neon-glow: rgba(0, 255, 136, 0.5);
+            --glass: rgba(10, 15, 15, 0.98);
+            --font-futuristic: 'Orbitron', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+        body, html { background-color: var(--bg-dark); color: #fff; font-family: 'Rajdhani', sans-serif; width: 100%; height: 100vh; overflow: hidden; }
+        
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+        header {
+            position: fixed; top: 15px; left: 15px; right: 15px; height: 60px;
+            background: var(--glass); backdrop-filter: blur(20px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; border: 1px solid var(--neon-green);
+            border-radius: 20px; z-index: 1000; box-shadow: 0 0 15px var(--neon-glow);
+        }
+        .logo-text { font-family: var(--font-futuristic); font-size: 13px; color: var(--neon-green); text-shadow: 0 0 10px var(--neon-glow); }
+        .balance-pill { background: rgba(0,255,136,0.1); border: 1px solid var(--neon-green); padding: 6px 15px; border-radius: 30px; display: flex; align-items: center; gap: 8px; }
+        .balance-pill span { font-family: var(--font-futuristic); font-size: 10px; color: var(--neon-green); }
+
+        .main-content { position: absolute; top: 90px; bottom: 0; left: 0; right: 0; padding: 10px 20px; overflow-y: auto; z-index: 5; scroll-behavior: smooth; }
+        .section { display: none; padding-bottom: 80px; }
+        .section.active { display: block; animation: fadeIn 0.4s ease; }
+        .section-title { font-family: var(--font-futuristic); font-size: 11px; color: var(--neon-green); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+
+        .container-cards { display: flex; flex-direction: column; align-items: center; gap: 25px; width: 100%; }
+        .card-shop {
+            background: #080808; width: 100%; max-width: 340px;
+            border-radius: 20px; overflow: hidden; position: relative;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: 0.3s;
+        }
+        .card-shop:active { transform: scale(0.96); border-color: var(--neon-green); box-shadow: 0 0 25px var(--neon-glow); }
+        .card-img { width: 100%; height: 170px; object-fit: cover; border-bottom: 1px solid rgba(0, 255, 136, 0.1); }
+        .card-body { padding: 15px; text-align: center; }
+        .card-name { font-family: var(--font-futuristic); font-size: 12px; color: #fff; margin-bottom: 8px; text-transform: uppercase; }
+        .card-desc { font-size: 11px; color: #777; line-height: 1.4; margin-bottom: 10px; }
+        .card-badge { font-size: 9px; color: var(--neon-green); font-weight: bold; border: 1px solid var(--neon-green); padding: 3px 10px; border-radius: 5px; }
+
+        .grid-paises { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 340px; margin: 0 auto; }
+        .country-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 18px; display: flex; align-items: center; justify-content: center; gap: 15px; transition: 0.3s; cursor: pointer; }
+        .method-card { background: #080808; border: 1px solid var(--neon-green); border-radius: 20px; padding: 20px; margin-bottom: 20px; width: 100%; max-width: 340px; margin-inline: auto; }
+        .method-title { font-family: var(--font-futuristic); color: var(--neon-green); font-size: 14px; margin-bottom: 10px; }
+        .method-info { font-size: 13px; color: #ccc; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 10px; margin-bottom: 15px; border: 1px dashed #333; }
+        .ticket-form { background: #080808; border: 1px solid var(--neon-green); border-radius: 20px; padding: 20px; width: 100%; max-width: 340px; margin: 0 auto; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        .input-group label { display: block; font-size: 10px; color: var(--neon-green); margin-bottom: 8px; font-family: var(--font-futuristic); }
+        .input-group input { width: 100%; background: #000; border: 1px solid #222; padding: 12px; border-radius: 10px; color: #fff; outline: none; }
+        .upload-container { border: 2px dashed #333; border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; }
+        #preview-img { width: 100%; max-height: 150px; object-fit: contain; border-radius: 8px; display: none; margin-top: 10px; border: 1px solid var(--neon-green); }
+
+        /* --- DRAWABLE STYLES --- */
+        .drawer {
+            position: fixed; top: 85px; left: -280px; width: 260px; height: calc(100% - 100px);
+            background: var(--glass); border: 1px solid var(--neon-green);
+            border-radius: 22px; z-index: 2000; transition: 0.5s; padding: 20px; overflow-y: auto;
+        }
+        .drawer.active { left: 15px; box-shadow: 0 0 30px var(--neon-glow); }
+        .drawer-item { padding: 14px; display: flex; align-items: center; justify-content: space-between; font-family: var(--font-futuristic); font-size: 9px; border-radius: 12px; margin-bottom: 8px; color: #eee; cursor: pointer; transition: 0.2s; }
+        .drawer-item i { color: var(--neon-green); font-size: 14px; }
+        .drawer-item:active { background: rgba(0, 255, 136, 0.1); color: var(--neon-green); }
+
+        #step-policies {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+            z-index: 4000; display: none; align-items: center; justify-content: center;
+        }
+        #step-policies.active { display: flex; }
+        .info-card { background: #0a0a0a; border: 1px solid var(--neon-green); border-radius: 25px; padding: 25px; text-align: center; width: 90%; max-width: 360px; box-shadow: 0 0 30px var(--neon-glow); }
+
+        .btn-buy, .btn-main, .btn-start { background: var(--neon-green); color: #000; border: none; width: 100%; padding: 15px; border-radius: 12px; font-family: var(--font-futuristic); font-weight: 900; font-size: 11px; cursor: pointer; text-transform: uppercase; }
+        .btn-back { background: transparent; color: #ff3c3c; border: 1px solid #ff3c3c; width: 100%; padding: 12px; border-radius: 12px; font-family: var(--font-futuristic); font-size: 10px; margin-top: 10px; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <header>
+        <i class="fas fa-cog" style="color: var(--neon-green); font-size: 22px;" onclick="toggleMenu()"></i>
+        <div class="logo-text">SUPREME XITS</div>
+        <div class="balance-pill">
+            <i class="fas fa-wallet" style="color: var(--neon-green); font-size: 12px;"></i>
+            <span id="user-balance">$1,500.00</span>
+        </div>
+    </header>
+
+    <div id="modal-buy" class="modal-overlay" onclick="closeOnBg(event)" style="position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(8px);">
+        <div class="modal-card" style="background: #050505; border: 2px solid var(--neon-green); width: 100%; max-width: 350px; border-radius: 25px; overflow: hidden; animation: slideUp 0.3s ease;">
+            <div id="step-info" class="modal-step active">
+                <img id="m-img" src="" style="width:100%; height:180px; object-fit:cover;">
+                <div class="p-body" style="padding: 25px; text-align: center;">
+                    <h2 id="m-name" class="p-title" style="font-family: var(--font-futuristic); color: var(--neon-green); font-size: 16px; margin-bottom: 10px;">PRODUCTO</h2>
+                    <p id="m-desc-full" class="p-desc-full" style="font-size: 12px; color: #bbb; line-height: 1.5; margin-bottom: 20px;">Cargando especificaciones...</p>
+                    <button class="btn-buy" onclick="showPrices()">VER OPCIONES DE COMPRA</button>
+                    <button class="btn-back" onclick="closeModal()">CANCELAR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="step-policies">
+        <div class="info-card">
+            <div class="icon-header" style="font-size:40px; color:var(--neon-green); margin-bottom:10px;"><i class="fas fa-shield-alt"></i></div>
+            <h2 id="policy-title" style="font-family: var(--font-futuristic); font-size: 15px;">PROTOCOLO DE SEGURIDAD</h2>
+            <div class="policies-container" id="policies-list"></div>
+            <button class="btn-start" onclick="confirmPolicy()">ENTENDIDO, CONTINUAR</button>
+            <button class="btn-back" onclick="closePolicy()">CANCELAR</button>
+        </div>
+    </div>
+
+    <nav id="main-drawer" class="drawer">
+        <div class="drawer-item" onclick="window.location.href='perfil.html'"><span>MI PERFIL</span><i class="fas fa-user-circle"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-dash')"><span>DASHBOARD</span><i class="fas fa-home"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-keys')"><span>TIENDA DE KEYS</span><i class="fas fa-key"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-proy')"><span>TIENDA PROYECTOS</span><i class="fas fa-code"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-serv')"><span>SERVICIOS VIP</span><i class="fas fa-gem"></i></div>
+        <div class="drawer-item" onclick="window.location.href='cuentas.html'"><span>TIENDA CUENTAS</span><i class="fas fa-user-shield"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-recargas')"><span>RECARGAS</span><i class="fas fa-credit-card"></i></div>
+        <div class="drawer-item" onclick="window.location.href='descargas.html'"><span>DESCARGAR MODZ</span><i class="fas fa-download"></i></div>
+        <div class="drawer-item" onclick="window.location.href='movimientos.html'"><span>MOVIMIENTOS</span><i class="fas fa-history"></i></div>
+        <div class="drawer-item" onclick="window.location.href='soporte.html'"><span>CHAT SOPORTE</span><i class="fas fa-headset"></i></div>
+        <div class="drawer-item" onclick="window.location.href='configuraciones.html'"><span>CONFIGURACIONES</span><i class="fas fa-sliders-h"></i></div>
+        <div class="drawer-item" onclick="window.location.href='creditos.html'"><span>CRÉDITOS</span><i class="fas fa-info-circle"></i></div>
+        <div class="drawer-item" style="color:#ff3c3c; margin-top:20px; border-top:1px solid #333; padding-top:10px;" onclick="window.location.href='index.html'"><span>CERRAR SESIÓN</span><i class="fas fa-power-off"></i></div>
+    </nav>
+
+    <main class="main-content">
+        <section id="sec-dash" class="section active"><h3 class="section-title">Novedades</h3><div id="grid-dash" class="container-cards"></div></section>
+        <section id="sec-keys" class="section"><h3 class="section-title">Keys de Inyección</h3><div id="grid-keys" class="container-cards"></div></section>
+        <section id="sec-proy" class="section"><h3 class="section-title">Proyectos</h3><div id="grid-proy" class="container-cards"></div></section>
+        <section id="sec-serv" class="section"><h3 class="section-title">Servicios VIP</h3><div id="grid-serv" class="container-cards"></div></section>
+        
+        <section id="sec-recargas" class="section">
+            <h3 class="section-title">Sistema de Recargas</h3>
+            <div id="recarga-step-countries">
+                <div class="grid-paises">
+                    <div class="country-card" onclick="triggerPolicy('venezuela')"><i class="fas fa-flag"></i> <span>VENEZUELA</span></div>
+                    <div class="country-card" onclick="triggerPolicy('colombia')"><i class="fas fa-flag"></i> <span>COLOMBIA</span></div>
+                    <div class="country-card" onclick="triggerPolicy('global')"><i class="fas fa-globe"></i> <span>GLOBAL</span></div>
+                </div>
+            </div>
+            <div id="recarga-step-methods" style="display:none;">
+                <div id="methods-container"></div>
+                <button class="btn-back" onclick="showRecargaStep('recarga-step-countries')">VOLVER</button>
+            </div>
+            <div id="recarga-step-ticket" style="display:none;">
+                <div class="ticket-form">
+                    <div class="input-group"><label>MONTO ($)</label><input type="number" id="t-monto"></div>
+                    <div class="input-group"><label>REFERENCIA / HASH</label><input type="text" id="t-ref"></div>
+                    <div class="input-group"><label>MÉTODO</label><input type="text" id="t-method-used" readonly style="color:#444"></div>
+                    <div class="input-group">
+                        <label>COMPROBANTE</label>
+                        <div class="upload-container" onclick="document.getElementById('file-input').click()">
+                            <i class="fas fa-camera"></i>
+                            <p id="status-text" style="font-size:9px;">SUBIR COMPROBANTE</p>
+                            <img id="preview-img" src="">
+                        </div>
+                        <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="processAndConvert()">
+                    </div>
+                    <button class="btn-main" onclick="sendTicket()">ENVIAR TICKET</button>
+                </div>
+                <button class="btn-back" onclick="showRecargaStep('recarga-step-methods')">CANCELAR</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyCfvk6-vE8iyP-p-RMGBlqmdggjLg1lY7I", 
+            authDomain: "sakuritamodz-web.firebaseapp.com", 
+            projectId: "sakuritamodz-web", 
+            databaseURL: "https://sakuritamodz-web-default-rtdb.firebaseio.com", 
+            appId: "1:1025154676126:web:caa752670a1be2759d528f" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // CARGA SECCIONES
+        const loadSection = (dbPath, containerId) => {
+            onValue(ref(db, dbPath), (snap) => {
+                const container = document.getElementById(containerId);
+                if(!container) return;
+                container.innerHTML = '';
+                snap.forEach(child => {
+                    const d = child.val();
+                    const raw = JSON.stringify(d).replace(/"/g, '&quot;');
+                    container.innerHTML += `<div class="card-shop" onclick="openStepDetail('${raw}')"><img src="${d.image}" class="card-img"><div class="card-body"><h4 class="card-name">${d.name}</h4><p class="card-desc">${d.short_desc || 'Optimización avanzada.'}</p><span class="card-badge">DETALLES</span></div></div>`;
+                });
+            });
+        };
+
+        loadSection('shop/keys', 'grid-dash');
+        loadSection('shop/keys', 'grid-keys');
+        loadSection('shop/proyectos', 'grid-proy');
+        loadSection('shop/servicios', 'grid-serv');
+
+        // RECARGAS LOGIC
+        const configRecargas = {
+            policyTitle: "SISTEMA DE SEGURIDAD",
+            policies: ["Solo 2 tickets activos.", "Comprobantes falsos = BAN.", "Revisión 5-30 min."],
+            data: {
+                venezuela: [{ name: "PAGO MÓVIL", info: "Bancamiga (0172)<br>V-27.444.123" }],
+                colombia: [{ name: "NEQUI", info: "Número: 312 456 7890" }],
+                global: [{ name: "BINANCE PAY", info: "ID: 45678912" }]
+            }
+        };
+
+        let tempCountry = "", base64String = "";
+
+        window.triggerPolicy = (country) => {
+            tempCountry = country;
+            const list = document.getElementById('policies-list');
+            document.getElementById('policy-title').innerText = configRecargas.policyTitle;
+            list.innerHTML = "";
+            configRecargas.policies.forEach(p => { list.innerHTML += `<div style="font-size:12px; color:#ccc; margin-bottom:5px;">✓ ${p}</div>`; });
+            document.getElementById('step-policies').style.display = "flex";
+        };
+
+        window.confirmPolicy = () => {
+            document.getElementById('step-policies').style.display = "none";
+            const container = document.getElementById('methods-container');
+            container.innerHTML = '';
+            configRecargas.data[tempCountry].forEach(m => {
+                container.innerHTML += `<div class="method-card"><div class="method-title">${m.name}</div><div class="method-info">${m.info}</div><button class="btn-main" onclick="goToTicket('${m.name}')">YA PAGUÉ</button></div>`;
+            });
+            showRecargaStep('recarga-step-methods');
+        };
+
+        window.closePolicy = () => document.getElementById('step-policies').style.display = "none";
+        window.goToTicket = (method) => { document.getElementById('t-method-used').value = method; showRecargaStep('recarga-step-ticket'); };
+        window.showRecargaStep = (stepId) => { ['recarga-step-countries', 'recarga-step-methods', 'recarga-step-ticket'].forEach(s => document.getElementById(s).style.display = 'none'); document.getElementById(stepId).style.display = 'block'; };
+
+        window.processAndConvert = () => {
+            const file = document.getElementById('file-input').files[0];
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image(); img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 600; canvas.height = (img.height * 600) / img.width;
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    base64String = canvas.toDataURL('image/jpeg', 0.6);
+                    document.getElementById('preview-img').src = base64String;
+                    document.getElementById('preview-img').style.display = "block";
+                };
+            };
+        };
+
+        window.sendTicket = () => { if(base64String) alert("Ticket enviado!"); };
+
+        // NAVEGACIÓN
+        window.toggleMenu = () => document.getElementById('main-drawer').classList.toggle('active');
+        window.changeSection = (id) => {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            toggleMenu();
+        };
+
+        window.openStepDetail = (d) => {
+            const data = JSON.parse(d);
+            document.getElementById('m-img').src = data.image;
+            document.getElementById('m-name').innerText = data.name;
+            document.getElementById('m-desc-full').innerText = data.desc || "Detalles.";
+            document.getElementById('modal-buy').style.display = 'flex';
+        };
+        window.closeModal = () => document.getElementById('modal-buy').style.display = 'none';
+
+        particlesJS("particles-js", { "particles": { "number": { "value": 35 }, "color": { "value": "#00ff88" }, "opacity": { "value": 0.2 }, "size": { "value": 1.5 }, "line_linked": { "enable": true, "distance": 150, "color": "#00ff88", "opacity": 0.1 }, "move": { "enable": true, "speed": 1 } } });
+    </script>
+</body>
+</html>
