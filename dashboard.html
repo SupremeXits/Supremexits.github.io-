@@ -23,7 +23,6 @@
         
         #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 
-        /* --- HEADER --- */
         header {
             position: fixed; top: 15px; left: 15px; right: 15px; height: 60px;
             background: var(--glass); backdrop-filter: blur(20px);
@@ -35,13 +34,11 @@
         .balance-pill { background: rgba(0,255,136,0.1); border: 1px solid var(--neon-green); padding: 6px 15px; border-radius: 30px; display: flex; align-items: center; gap: 8px; }
         .balance-pill span { font-family: var(--font-futuristic); font-size: 10px; color: var(--neon-green); }
 
-        /* --- CONTENIDO --- */
         .main-content { position: absolute; top: 90px; bottom: 0; left: 0; right: 0; padding: 10px 20px; overflow-y: auto; z-index: 5; scroll-behavior: smooth; }
         .section { display: none; padding-bottom: 80px; }
         .section.active { display: block; animation: fadeIn 0.4s ease; }
         .section-title { font-family: var(--font-futuristic); font-size: 11px; color: var(--neon-green); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
 
-        /* --- CARDS TIENDA --- */
         .container-cards { display: flex; flex-direction: column; align-items: center; gap: 25px; width: 100%; }
         .card-shop {
             background: #080808; width: 100%; max-width: 340px;
@@ -57,13 +54,10 @@
         .card-desc { font-size: 11px; color: #777; line-height: 1.4; margin-bottom: 10px; }
         .card-badge { font-size: 9px; color: var(--neon-green); font-weight: bold; border: 1px solid var(--neon-green); padding: 3px 10px; border-radius: 5px; text-transform: uppercase; cursor: pointer;}
 
-        /* --- SELECTS & CONFIGS --- */
         .select-key, .select-config { background: #000; color: var(--neon-green); border: 1px solid #222; border-radius: 8px; font-size: 10px; padding: 12px; width: 100%; margin: 10px 0; outline: none; font-family: var(--font-futuristic); }
         .config-card { background: rgba(255,255,255,0.03); border: 1px solid #111; padding: 20px; border-radius: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .config-flex { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
-        .config-flex:last-child { border: none; }
-
-        /* --- DRAWABLE --- */
+        
         .drawer {
             position: fixed; top: 85px; left: -280px; width: 260px; height: calc(100% - 100px);
             background: var(--glass); border: 1px solid var(--neon-green);
@@ -72,20 +66,15 @@
         .drawer.active { left: 15px; box-shadow: 0 0 30px var(--neon-glow); }
         .drawer-item { padding: 14px; display: flex; align-items: center; justify-content: space-between; font-family: var(--font-futuristic); font-size: 9px; border-radius: 12px; margin-bottom: 8px; color: #eee; cursor: pointer; transition: 0.2s; }
         .drawer-item i { color: var(--neon-green); font-size: 14px; }
-        .drawer-item:active { background: rgba(0, 255, 136, 0.1); color: var(--neon-green); }
 
-        /* --- MODAL SUPREME --- */
         .modal-body { padding: 30px; text-align: center; }
         .modal-icon { font-size: 50px; color: var(--neon-green); margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--neon-glow)); }
         .confirm-title { font-family: var(--font-futuristic); font-size: 18px; color: #fff; letter-spacing: 2px; margin-bottom: 5px; text-transform: uppercase; }
-        .confirm-product { font-size: 14px; color: #777; margin-bottom: 15px; display: block; }
         .confirm-price { font-family: var(--font-futuristic); font-size: 28px; color: var(--neon-green); margin-bottom: 20px; text-shadow: 0 0 15px var(--neon-glow); }
 
         .btn-buy { background: var(--neon-green); color: #000; border: none; width: 100%; padding: 15px; border-radius: 12px; font-family: var(--font-futuristic); font-size: 11px; font-weight: 900; margin-bottom: 10px; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
-        .btn-buy:active { transform: scale(0.95); background: #fff; }
         .btn-back { background: transparent; color: var(--red); border: 1px solid var(--red); width: 100%; padding: 12px; border-radius: 12px; font-family: var(--font-futuristic); font-size: 10px; cursor: pointer; text-transform: uppercase; }
 
-        /* --- SWITCHES --- */
         .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #222; transition: .4s; border-radius: 34px; border: 1px solid #333; }
@@ -115,55 +104,39 @@
     </div>
 
     <nav id="main-drawer" class="drawer">
-        <div class="drawer-item" onclick="window.location.href='perfil.html'"><span data-i18n="menu_profile">MI PERFIL</span><i class="fas fa-user-circle"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-dash')"><span data-i18n="menu_dash">DASHBOARD</span><i class="fas fa-home"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-keys')"><span data-i18n="menu_keys">TIENDA DE KEYS</span><i class="fas fa-key"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-proy')"><span data-i18n="menu_proy">TIENDA PROYECTOS</span><i class="fas fa-code"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-serv')"><span data-i18n="menu_serv">SERVICIOS VIP</span><i class="fas fa-gem"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-cuentas')"><span data-i18n="menu_accounts">TIENDA CUENTAS</span><i class="fas fa-user-shield"></i></div>
-        <div class="drawer-item" onclick="window.location.href='recargas.html'"><span data-i18n="menu_recharges">RECARGAS</span><i class="fas fa-credit-card"></i></div>
-        <div class="drawer-item" onclick="window.location.href='descargas.html'"><span data-i18n="menu_mods">DESCARGAR MODZ</span><i class="fas fa-download"></i></div>
-        <div class="drawer-item" onclick="window.location.href='movimientos.html'"><span data-i18n="menu_moves">MOVIMIENTOS</span><i class="fas fa-history"></i></div>
-        <div class="drawer-item" onclick="window.location.href='soporte.html'"><span data-i18n="menu_support">CHAT SOPORTE</span><i class="fas fa-headset"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-config')"><span data-i18n="menu_config">CONFIGURACIONES</span><i class="fas fa-sliders-h"></i></div>
-        <div class="drawer-item" onclick="window.location.href='creditos.html'"><span data-i18n="menu_credits">CRÉDITOS</span><i class="fas fa-info-circle"></i></div>
-        <div class="drawer-item" style="color:#ff3c3c; margin-top:20px; border-top:1px solid #333; padding-top:10px;" onclick="window.location.href='index.html'"><span data-i18n="menu_logout">CERRAR SESIÓN</span><i class="fas fa-power-off"></i></div>
+        <div class="drawer-item" onclick="window.location.href='perfil.html'"><span>MI PERFIL</span><i class="fas fa-user-circle"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-dash')"><span>DASHBOARD</span><i class="fas fa-home"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-keys')"><span>TIENDA DE KEYS</span><i class="fas fa-key"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-proy')"><span>TIENDA PROYECTOS</span><i class="fas fa-code"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-serv')"><span>SERVICIOS VIP</span><i class="fas fa-gem"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-cuentas')"><span>TIENDA CUENTAS</span><i class="fas fa-user-shield"></i></div>
+        <div class="drawer-item" onclick="window.location.href='recargas.html'"><span>RECARGAS</span><i class="fas fa-credit-card"></i></div>
+        <div class="drawer-item" onclick="window.location.href='descargas.html'"><span>DESCARGAR MODZ</span><i class="fas fa-download"></i></div>
+        <div class="drawer-item" onclick="window.location.href='movimientos.html'"><span>MOVIMIENTOS</span><i class="fas fa-history"></i></div>
+        <div class="drawer-item" onclick="window.location.href='soporte.html'"><span>CHAT SOPORTE</span><i class="fas fa-headset"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-config')"><span>CONFIGURACIONES</span><i class="fas fa-sliders-h"></i></div>
+        <div class="drawer-item" onclick="window.location.href='creditos.html'"><span>CRÉDITOS</span><i class="fas fa-info-circle"></i></div>
+        <div class="drawer-item" style="color:#ff3c3c; margin-top:20px; border-top:1px solid #333; padding-top:10px;" onclick="window.location.href='index.html'"><span>CERRAR SESIÓN</span><i class="fas fa-power-off"></i></div>
     </nav>
 
     <main class="main-content">
-        <section id="sec-dash" class="section active"><h3 class="section-title" data-i18n="title_news">Novedades</h3><div id="grid-dash" class="container-cards"></div></section>
-        <section id="sec-keys" class="section"><h3 class="section-title" data-i18n="title_keys">Keys de Inyección</h3><div id="grid-keys" class="container-cards"></div></section>
-        <section id="sec-proy" class="section"><h3 class="section-title" data-i18n="title_proy">Proyectos</h3><div id="grid-proy" class="container-cards"></div></section>
-        <section id="sec-serv" class="section"><h3 class="section-title" data-i18n="title_serv">Servicios VIP</h3><div id="grid-serv" class="container-cards"></div></section>
-        <section id="sec-cuentas" class="section"><h3 class="section-title" data-i18n="title_accounts">Cuentas Premium</h3><div id="grid-cuentas" class="container-cards"></div></section>
+        <section id="sec-dash" class="section active"><h3 class="section-title">Novedades</h3><div id="grid-dash" class="container-cards"></div></section>
+        <section id="sec-keys" class="section"><h3 class="section-title">Keys de Inyección</h3><div id="grid-keys" class="container-cards"></div></section>
+        <section id="sec-proy" class="section"><h3 class="section-title">Proyectos</h3><div id="grid-proy" class="container-cards"></div></section>
+        <section id="sec-serv" class="section"><h3 class="section-title">Servicios VIP</h3><div id="grid-serv" class="container-cards"></div></section>
+        <section id="sec-cuentas" class="section"><h3 class="section-title">Cuentas Premium</h3><div id="grid-cuentas" class="container-cards"></div></section>
         
         <section id="sec-config" class="section">
-            <h3 class="section-title" data-i18n="menu_config">Configuraciones</h3>
+            <h3 class="section-title">Configuraciones</h3>
             <div class="config-card">
-                <div class="config-flex">
-                    <span style="font-size:12px; color:var(--neon-green); font-family:var(--font-futuristic);" data-i18n="cfg_lang">IDIOMA</span>
-                    <i class="fas fa-globe" style="color:#444;"></i>
-                </div>
-                <select class="select-config" id="lang-selector" onchange="changeLanguage(this.value)">
+                <div class="config-flex"><span style="font-size:12px; color:var(--neon-green); font-family:var(--font-futuristic);">IDIOMA</span><i class="fas fa-globe" style="color:#444;"></i></div>
+                <select class="select-config" id="lang-selector">
                     <option value="es">Español (LATAM)</option>
                     <option value="en">English (Global)</option>
-                    <option value="pt-br">Português (Brasil)</option>
-                    <option value="pt">Português (Europa)</option>
                 </select>
             </div>
             <div class="config-card">
-                <div class="config-flex">
-                    <span style="font-size:12px;" data-i18n="cfg_particles">EFECTO PARTICULAS</span>
-                    <label class="switch"><input type="checkbox" checked onchange="toggleParticles(this.checked)"><span class="slider"></span></label>
-                </div>
-                <div class="config-flex">
-                    <span style="font-size:12px;" data-i18n="cfg_sounds">SONIDOS UI</span>
-                    <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-                </div>
-                <div class="config-flex">
-                    <span style="font-size:12px;" data-i18n="cfg_notif">NOTIFICACIONES</span>
-                    <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-                </div>
+                <div class="config-flex"><span>EFECTO PARTICULAS</span><label class="switch"><input type="checkbox" checked onchange="toggleParticles(this.checked)"><span class="slider"></span></label></div>
             </div>
             <p style="text-align:center; font-size:9px; color:#444; font-family:var(--font-futuristic);">SUPREME XITS V33 PRIME - 2026</p>
         </section>
@@ -172,7 +145,7 @@
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue, get, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, onValue, get, remove, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, onSnapshot, updateDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -191,21 +164,6 @@
 
         let userBalance = 0;
 
-        // --- TRADUCTOR ---
-        const i18n = {
-            es: { menu_profile: "MI PERFIL", menu_dash: "DASHBOARD", menu_keys: "TIENDA DE KEYS", menu_proy: "TIENDA PROYECTOS", menu_serv: "SERVICIOS VIP", menu_accounts: "TIENDA CUENTAS", menu_recharges: "RECARGAS", menu_mods: "DESCARGAR MODZ", menu_moves: "MOVIMIENTOS", menu_support: "CHAT SOPORTE", menu_config: "CONFIGURACIONES", menu_credits: "CRÉDITOS", menu_logout: "CERRAR SESIÓN", title_news: "Novedades", title_keys: "Keys de Inyección", title_proy: "Proyectos", title_serv: "Servicios VIP", title_accounts: "Cuentas Premium", cfg_lang: "IDIOMA", cfg_particles: "EFECTO PARTICULAS", cfg_sounds: "SONIDOS UI", cfg_notif: "NOTIFICACIONES", confirm_buy: "CONFIRMAR", buy_btn: "ACEPTAR", cancel_btn: "CANCELAR" },
-            en: { menu_profile: "MY PROFILE", menu_dash: "DASHBOARD", menu_keys: "KEYS SHOP", menu_proy: "PROJECTS SHOP", menu_serv: "VIP SERVICES", menu_accounts: "ACCOUNTS SHOP", menu_recharges: "RECHARGE", menu_mods: "DOWNLOAD MODS", menu_moves: "MOVEMENTS", menu_support: "SUPPORT CHAT", menu_config: "SETTINGS", menu_credits: "CREDITS", menu_logout: "LOGOUT", title_news: "Latest News", title_keys: "Injection Keys", title_proy: "Projects", title_serv: "VIP Services", title_accounts: "Premium Accounts", cfg_lang: "LANGUAGE", cfg_particles: "PARTICLES EFFECT", cfg_sounds: "UI SOUNDS", cfg_notif: "NOTIFICATIONS", confirm_buy: "CONFIRM", buy_btn: "ACCEPT", cancel_btn: "CANCEL" },
-            "pt-br": { menu_profile: "MEU PERFIL", menu_dash: "PAINEL", menu_keys: "LOJA DE KEYS", menu_proy: "LOJA DE PROJETOS", menu_serv: "SERVIÇOS VIP", menu_accounts: "LOJA DE CONTAS", menu_recharges: "RECARGAS", menu_mods: "BAIXAR MODS", menu_moves: "MOVIMENTOS", menu_support: "SUPORTE", menu_config: "CONFIGURAÇÕES", menu_credits: "CRÉDITOS", menu_logout: "SAIR", title_news: "Novidades", title_keys: "Keys de Injeção", title_proy: "Projetos", title_serv: "Serviços VIP", title_accounts: "Contas Premium", cfg_lang: "IDIOMA", cfg_particles: "EFEITO PARTICULAS", cfg_sounds: "SONS UI", cfg_notif: "NOTIFICAÇÕES", confirm_buy: "CONFIRMAR", buy_btn: "ACEITAR", cancel_btn: "CANCELAR" },
-            pt: { menu_profile: "PERFIL", menu_dash: "DASHBOARD", menu_keys: "LOJA KEYS", menu_proy: "LOJA PROJETOS", menu_serv: "SERVIÇOS VIP", menu_accounts: "CONTAS", menu_recharges: "RECARGAR", menu_mods: "DOWNLOADS", menu_moves: "HISTÓRICO", menu_support: "SUPORTE", menu_config: "AJUSTES", menu_credits: "CRÉDITOS", menu_logout: "ENCERRAR", title_news: "Novidades", title_keys: "Keys", title_proy: "Projetos", title_serv: "Serviços", title_accounts: "Contas", cfg_lang: "IDIOMA", cfg_particles: "PARTÍCULAS", cfg_sounds: "SONS", cfg_notif: "NOTIFICAÇÕES", confirm_buy: "CONFIRMAR", buy_btn: "COMPRAR", cancel_btn: "CANCELAR" }
-        };
-
-        window.changeLanguage = (lang) => {
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if(i18n[lang] && i18n[lang][key]) el.innerText = i18n[lang][key];
-            });
-        };
-
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 onSnapshot(doc(dbFS, "users", user.uid), (snap) => {
@@ -217,81 +175,69 @@
             } else { window.location.href = 'index.html'; }
         });
 
-        // --- MODAL DE ÉXITO SUPREME ---
-        window.showSuccessModal = (codigoFinal) => {
-            navigator.clipboard.writeText(codigoFinal);
-            const modalContent = document.getElementById('modal-content');
-            modalContent.innerHTML = `
-                <div class="modal-body">
-                    <i class="fas fa-check-circle modal-icon"></i>
-                    <h2 class="confirm-title">ORDEN COMPLETA</h2>
-                    <div style="background: rgba(0,255,136,0.05); border: 1px dashed var(--neon-green); padding: 15px; margin: 15px 0; border-radius: 12px;">
-                        <span style="font-size: 8px; color: var(--neon-green); display:block; margin-bottom:5px;">CÓDIGO / KEY:</span>
-                        <h3 style="font-family: 'Orbitron', monospace; color: #fff; font-size: 14px; word-break: break-all;">${codigoFinal}</h3>
-                    </div>
-                    <button class="btn-buy" onclick="closeModal()">ENTENDIDO</button>
-                    <p style="font-size: 8px; color: #555;">Copiado automáticamente</p>
-                </div>`;
-            document.getElementById('modal-buy').style.display = 'flex';
-        };
-
-        // --- CONFIRMACIÓN VISUAL (MEJORADO) ---
-        window.showConfirmModal = (name, price, id, path) => {
-            const lang = document.getElementById('lang-selector').value;
-            const modalContent = document.getElementById('modal-content');
-            modalContent.innerHTML = `
-                <div class="modal-body">
-                    <i class="fas fa-shopping-cart modal-icon"></i>
-                    <h2 class="confirm-title">${i18n[lang].confirm_buy}</h2>
-                    <span class="confirm-product">${name}</span>
-                    <div class="confirm-price">$${price}</div>
-                    <button class="btn-buy" onclick="executePurchase('${id}', '${name}', '${price}', '${path}')">${i18n[lang].buy_btn}</button>
-                    <button class="btn-back" onclick="closeModal()">${i18n[lang].cancel_btn}</button>
-                </div>`;
-            document.getElementById('modal-buy').style.display = 'flex';
-        };
-
-        window.buyProduct = (id, name, path) => {
-            let price;
-            const isKey = path.includes('keys');
-            if(isKey){
-                price = parseFloat(document.getElementById(`select-${id}`).value);
-            } else {
-                price = parseFloat(document.getElementById(`price-val-${id}`).innerText);
-            }
-            if(userBalance < price) { 
-                showErrorModal("ERROR", "Saldo insuficiente en billetera."); 
-                return; 
-            }
-            showConfirmModal(name, price, id, path);
-        };
-
+        // --- FUNCIÓN DE COMPRA MEJORADA ---
         window.executePurchase = async (id, name, price, path) => {
-            const p = parseFloat(price); closeModal();
+            const p = parseFloat(price); 
+            closeModal();
+            const user = auth.currentUser;
+            if (!user) return;
+
             try {
-                let entrega = "TICKET-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+                // 1. Obtener datos del perfil con fallback a "null"
+                const userRef = ref(dbRT, `registro_usuarios/${user.uid}`);
+                const userSnap = await get(userRef);
+                const uData = userSnap.exists() ? userSnap.val() : {};
+
+                const nombreTicket = uData.usuario || "null";
+                const correoTicket = uData.correo || user.email || "null";
+                const numeroTicket = uData.numero || "null";
+
+                // 2. Generar ID único de Ticket
+                const ticketID = "TICKET-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+                let entrega = ticketID; // Por defecto es el ticket, si es Key cambia abajo
+
                 const isKey = path.includes('keys');
                 if(isKey) {
                     const sel = document.getElementById(`select-${id}`);
                     const timeTag = sel.options[sel.selectedIndex].getAttribute('data-time');
                     const stockRef = ref(dbRT, `stock_keys/${id}/${timeTag}`);
                     const stockSnap = await get(stockRef);
-                    if(!stockSnap.exists()) { 
-                        showErrorModal("SIN STOCK", "No hay inventario disponible."); 
-                        return; 
-                    }
+                    if(!stockSnap.exists()) { showErrorModal("SIN STOCK", "No hay inventario."); return; }
+                    
                     const keys = stockSnap.val();
                     const firstId = Object.keys(keys)[0];
-                    entrega = keys[firstId];
+                    entrega = keys[firstId]; // Obtenemos la Key real del stock
                     await remove(ref(dbRT, `stock_keys/${id}/${timeTag}/${firstId}`));
                 }
-                await updateDoc(doc(dbFS, "users", auth.currentUser.uid), { balance: userBalance - p });
-                await addDoc(collection(dbFS, "compras"), { uid: auth.currentUser.uid, item: name, precio: p, entrega: entrega, fecha: Date.now() });
+
+                // 3. GUARDAR EN tickets_pendientes USANDO EL ID COMO NODO
+                const now = new Date();
+                const horaLocal = now.toLocaleDateString() + " " + now.toLocaleTimeString();
+
+                await set(ref(dbRT, `tickets_pendientes/${ticketID}`), {
+                    ticket_id: ticketID,
+                    uid: user.uid,
+                    usuario: nombreTicket,
+                    correo: correoTicket,
+                    numero: numeroTicket,
+                    compra: name,
+                    costo: p,
+                    entrega: entrega,
+                    hora: horaLocal,
+                    status: "completado"
+                });
+
+                // 4. Actualizar saldos y auditoría
+                await updateDoc(doc(dbFS, "users", user.uid), { balance: userBalance - p });
+                await addDoc(collection(dbFS, "compras"), { uid: user.uid, item: name, precio: p, entrega: entrega, fecha: Date.now() });
+                
                 showSuccessModal(entrega);
-            } catch(e) { showErrorModal("SISTEMA", "Error al procesar. Intente de nuevo."); }
+            } catch(e) { 
+                console.error(e);
+                showErrorModal("SISTEMA", "Error al procesar el ticket."); 
+            }
         };
 
-        // --- CARGA DE SECCIONES ---
         window.loadSection = (dbPath, containerId) => {
             onValue(ref(dbRT, dbPath), (snap) => {
                 const container = document.getElementById(containerId);
@@ -320,7 +266,7 @@
                                 ${selectorHtml}
                                 <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
                                     <span style="font-size:9px; color:#444;">ID: ${child.key}</span>
-                                    <span class="card-badge" data-i18n="buy_btn" onclick="openStepDetail('${child.key}', '${dbPath}', '${JSON.stringify(d).replace(/"/g, '&quot;')}')">ADQUIRIR</span>
+                                    <span class="card-badge" onclick="openStepDetail('${child.key}', '${dbPath}', '${JSON.stringify(d).replace(/"/g, '&quot;')}')">ADQUIRIR</span>
                                 </div>
                             </div>
                         </div>`;
@@ -334,28 +280,65 @@
         loadSection('shop/servicios', 'grid-serv');
         loadSection('shop/cuentas', 'grid-cuentas');
 
-        window.openStepDetail = (id, path, dataRaw) => {
-            const data = JSON.parse(dataRaw);
-            const isKey = path.includes('keys');
-            const pVal = isKey ? document.getElementById(`select-${id}`).value : data.price;
+        window.buyProduct = (id, name, path) => {
+            let price;
+            if(path.includes('keys')) price = parseFloat(document.getElementById(`select-${id}`).value);
+            else price = parseFloat(document.getElementById(`price-val-${id}`).innerText);
+            if(userBalance < price) { showErrorModal("ERROR", "Saldo insuficiente."); return; }
+            showConfirmModal(name, price, id, path);
+        };
+
+        window.showConfirmModal = (name, price, id, path) => {
             const modalContent = document.getElementById('modal-content');
             modalContent.innerHTML = `
-                <img src="${data.image}" style="width:100%; height:180px; object-fit:cover; filter: brightness(0.7);">
+                <div class="modal-body">
+                    <i class="fas fa-shopping-cart modal-icon"></i>
+                    <h2 class="confirm-title">CONFIRMAR</h2>
+                    <span style="font-size:14px; color:#777;">${name}</span>
+                    <div class="confirm-price" style="margin:20px 0;">$${price}</div>
+                    <button class="btn-buy" onclick="executePurchase('${id}', '${name}', '${price}', '${path}')">ACEPTAR</button>
+                    <button class="btn-back" onclick="closeModal()">CANCELAR</button>
+                </div>`;
+            document.getElementById('modal-buy').style.display = 'flex';
+        };
+
+        window.showSuccessModal = (res) => {
+            navigator.clipboard.writeText(res);
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `
+                <div class="modal-body">
+                    <i class="fas fa-check-circle modal-icon"></i>
+                    <h2 class="confirm-title">ORDEN LISTA</h2>
+                    <div style="background: rgba(0,255,136,0.05); border: 1px dashed var(--neon-green); padding: 15px; margin: 20px 0; border-radius: 12px;">
+                        <h3 style="color: #fff; font-size: 14px; word-break: break-all;">${res}</h3>
+                    </div>
+                    <button class="btn-buy" onclick="closeModal()">ENTENDIDO</button>
+                    <p style="font-size: 8px; color: #444;">Copiado al portapapeles</p>
+                </div>`;
+            document.getElementById('modal-buy').style.display = 'flex';
+        };
+
+        window.openStepDetail = (id, path, dataRaw) => {
+            const data = JSON.parse(dataRaw);
+            const pVal = path.includes('keys') ? document.getElementById(`select-${id}`).value : data.price;
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `
+                <img src="${data.image}" style="width:100%; height:180px; object-fit:cover;">
                 <div class="modal-body">
                     <h2 class="confirm-title">${data.name}</h2>
-                    <p style="font-size: 11px; color: #666; margin: 15px 0;">${data.desc || "Calidad Supreme garantizada."}</p>
+                    <p style="font-size: 11px; color: #666; margin: 15px 0;">${data.desc || "Calidad Supreme."}</p>
                     <button class="btn-buy" onclick="buyProduct('${id}', '${data.name}', '${path}')">PAGAR ($${pVal})</button>
                     <button class="btn-back" onclick="closeModal()">VOLVER</button>
                 </div>`;
             document.getElementById('modal-buy').style.display = 'flex';
         };
 
-        window.toggleParticles = (val) => document.getElementById('particles-js').style.display = val ? 'block' : 'none';
         window.showErrorModal = (t, m) => {
             const modalContent = document.getElementById('modal-content');
             modalContent.innerHTML = `<div class="modal-body"><i class="fas fa-times-circle modal-icon" style="color:var(--red)"></i><h2 class="confirm-title">${t}</h2><p style="color:#777; margin:20px 0;">${m}</p><button class="btn-back" onclick="closeModal()">CERRAR</button></div>`;
             document.getElementById('modal-buy').style.display = 'flex';
         };
+
         window.closeModal = () => document.getElementById('modal-buy').style.display = 'none';
         window.toggleMenu = () => document.getElementById('main-drawer').classList.toggle('active');
         window.changeSection = (id) => {
