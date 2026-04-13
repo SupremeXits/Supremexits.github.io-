@@ -13,17 +13,18 @@
             --bg-dark: #000000;
             --neon-green: #00ff88;
             --neon-red: #ff3c3c;
-            --card-bg: rgba(10, 10, 10, 0.9);
+            --neon-yellow: #ffcc00;
+            --card-bg: rgba(7, 7, 7, 0.95);
             --font-futuristic: 'Orbitron', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg-dark); color: #fff; font-family: 'Rajdhani', sans-serif; overflow: hidden; height: 100vh; }
         
-        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; top:0; left:0; }
-        .content { position: relative; z-index: 10; padding: 20px; max-width: 450px; margin: 0 auto; height: 100vh; overflow-y: auto; }
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; top:0; left:0; pointer-events: none; }
+        .content { position: relative; z-index: 10; padding: 20px; max-width: 450px; margin: 0 auto; height: 100vh; overflow-y: auto; scrollbar-width: none; }
+        .content::-webkit-scrollbar { display: none; }
 
-        /* HEADER & NAV */
         .nav-top { margin-bottom: 20px; }
         .btn-volver {
             background: transparent; border: 1px solid var(--neon-green);
@@ -36,15 +37,17 @@
         .header-title i { color: var(--neon-green); font-size: 30px; filter: drop-shadow(0 0 10px var(--neon-green)); }
         .header-title h2 { font-family: var(--font-futuristic); font-size: 16px; letter-spacing: 2px; margin-top: 10px; text-transform: uppercase; }
 
-        /* MOVIMIENTOS LIST */
+        h3 { font-family: var(--font-futuristic); font-size: 10px; color: var(--neon-green); margin: 20px 0 10px 0; letter-spacing: 1px; }
+
+        /* CARDS */
         .supreme-card {
             background: var(--card-bg); border: 1px solid #111; border-radius: 10px;
-            padding: 15px; margin-bottom: 10px; border-left: 3px solid var(--neon-green);
-            display: flex; justify-content: space-between; align-items: center; cursor: pointer;
-            animation: fadeIn 0.5s ease;
+            padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; 
+            align-items: center; cursor: pointer; animation: fadeIn 0.5s ease; border-left: 3px solid #222;
         }
+        .card-pending { border-left-color: var(--neon-yellow); opacity: 0.8; }
+        .card-income { border-left-color: var(--neon-green); }
         .card-expense { border-left-color: var(--neon-red); }
-        .card-example { border-left-style: dashed; opacity: 0.6; }
 
         .mov-info { display: flex; flex-direction: column; }
         .mov-item { font-family: var(--font-futuristic); font-size: 10px; color: #eee; text-transform: uppercase; }
@@ -62,7 +65,10 @@
         }
         .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid #111; padding-bottom: 5px; }
         .detail-label { font-size: 9px; color: #444; text-transform: uppercase; }
-        .detail-value { font-size: 11px; color: #fff; font-weight: 600; }
+        .detail-value { font-size: 11px; color: #fff; font-weight: 600; text-align: right; }
+        
+        .ticket-img-preview { width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #222; max-height: 180px; object-fit: contain; }
+        
         .btn-cerrar {
             width: 100%; background: var(--neon-green); color: #000; border: none; padding: 10px;
             font-family: var(--font-futuristic); font-size: 10px; font-weight: 900; border-radius: 4px; margin-top: 10px;
@@ -81,20 +87,28 @@
         </div>
 
         <div class="header-title">
-            <i class="fas fa-list-ul"></i>
-            <h2>Lista de Movimientos</h2>
-            <p style="font-size: 9px; color: #333; letter-spacing: 1px; margin-top: 5px;">SISTEMA DE TICKETS RTDB</p>
+            <i class="fas fa-history"></i>
+            <h2>Mis Movimientos</h2>
         </div>
 
-        <div id="movimientos-container">
+        <div id="sec-pendientes" style="display:none;">
+            <h3>🕒 En Revisión</h3>
+            <div id="list-pendientes"></div>
+        </div>
+
+        <div id="sec-historial">
+            <h3>📊 Historial</h3>
+            <div id="list-historial">
+                <p style="text-align:center; font-size:9px; color:#222; margin-top:20px;">SIN ACTIVIDAD</p>
             </div>
+        </div>
     </div>
 
     <div id="modalInfo" class="modal">
         <div class="modal-content">
-            <p style="font-family:'Orbitron'; font-size:10px; color:var(--neon-green); margin-bottom:15px; text-align:center;">DATOS DE TRANSACCIÓN</p>
+            <p style="font-family:'Orbitron'; font-size:10px; color:var(--neon-green); margin-bottom:15px; text-align:center; letter-spacing:2px;">LOG DATA</p>
             <div id="modal-body"></div>
-            <button class="btn-cerrar" onclick="closeModal()">ENTENDIDO</button>
+            <button class="btn-cerrar" onclick="closeModal()">CERRAR</button>
         </div>
     </div>
 
@@ -116,7 +130,7 @@
         const auth = getAuth(app);
         const dbRT = getDatabase(app);
 
-        // CONFIG DE PARTÍCULAS (Original Supreme)
+        // CONFIG DE PARTÍCULAS (Supreme Original)
         particlesJS("particles-js", {
             "particles": {
                 "number": { "value": 80 },
@@ -128,70 +142,78 @@
             }
         });
 
-        // CONTROL DE SESIÓN
         onAuthStateChanged(auth, (user) => {
-            if (user) { 
-                loadHistory(user.uid); 
-            } else { 
-                setTimeout(() => { if(!auth.currentUser) window.location.href="index.html"; }, 1500); 
-            }
+            if (user) { loadAllData(user.uid); } 
+            else { window.location.href="index.html"; }
         });
 
-        function loadHistory(uid) {
-            onValue(ref(dbRT, 'tickets'), (snapshot) => {
-                const container = document.getElementById('movimientos-container');
-                container.innerHTML = '';
-                
-                let userTickets = [];
-                if(snapshot.exists()){
-                    snapshot.forEach(child => {
-                        const data = child.val();
-                        if(data.uid === uid) userTickets.push(data);
+        function loadAllData(uid) {
+            // 1. Pendientes
+            onValue(ref(dbRT, 'tickets_recarga'), (snap) => {
+                const list = document.getElementById('list-pendientes');
+                list.innerHTML = '';
+                let count = 0;
+                snap.forEach(c => {
+                    const d = c.val();
+                    if(d.uid === uid) {
+                        count++;
+                        list.innerHTML += renderCard(d, 'card-pending');
+                    }
+                });
+                document.getElementById('sec-pendientes').style.display = count > 0 ? 'block' : 'none';
+            });
+
+            // 2. Historial (Aprobados y Compras)
+            onValue(ref(dbRT), (snap) => {
+                const list = document.getElementById('list-historial');
+                list.innerHTML = '';
+                let logs = [];
+
+                if(snap.child('tickets_aprobados').exists()){
+                    snap.child('tickets_aprobados').forEach(c => {
+                        const d = c.val();
+                        if(d.uid === uid) logs.push({...d, type: 'in'});
+                    });
+                }
+                if(snap.child('compras').exists()){
+                    snap.child('compras').forEach(c => {
+                        const d = c.val();
+                        if(d.uid === uid) logs.push({...d, type: 'out'});
                     });
                 }
 
-                if(userTickets.length === 0) {
-                    // SI NO HAY NADA, INSERTAMOS EL EJEMPLO
-                    renderCard({
-                        product: "Ticket de Ejemplo",
-                        fecha: "Sin movimientos aún",
-                        monto: "0.00",
-                        status: "PENDIENTE",
-                        category: "SISTEMA",
-                        isExample: true
-                    }, container);
+                if(logs.length === 0) {
+                    list.innerHTML = "<p style='text-align:center; font-size:9px; color:#222; margin-top:20px;'>SIN ACTIVIDAD</p>";
                 } else {
-                    // SI HAY DATA, LA MOSTRAMOS (Últimos primero)
-                    userTickets.reverse().forEach(ticket => renderCard(ticket, container));
+                    logs.sort((a,b) => (b.timestamp_admin || 0) - (a.timestamp_admin || 0));
+                    logs.forEach(l => list.innerHTML += renderCard(l, l.type === 'in' ? 'card-income' : 'card-expense'));
                 }
             });
         }
 
-        function renderCard(data, container) {
-            const isInc = data.type === "recarga" || data.category === "RECARGA";
-            const card = document.createElement('div');
-            card.className = `supreme-card ${isInc ? 'card-income' : 'card-expense'} ${data.isExample ? 'card-example' : ''}`;
-            
-            card.innerHTML = `
-                <div class="mov-info">
-                    <span class="mov-item">${data.product || data.item}</span>
-                    <span class="mov-date">${data.fecha}</span>
-                </div>
-                <div class="amount" style="color:${isInc ? '#00ff88':'#ff3c3c'}">
-                    ${isInc ? '+':'-'}$${parseFloat(data.monto).toFixed(2)}
-                </div>
-            `;
-            
-            card.onclick = () => showDetails(data);
-            container.appendChild(card);
+        function renderCard(d, cl) {
+            const isOut = cl === 'card-expense';
+            const sym = cl === 'card-pending' ? '' : (isOut ? '-' : '+');
+            const col = cl === 'card-pending' ? 'var(--neon-yellow)' : (isOut ? 'var(--neon-red)' : 'var(--neon-green)');
+            const dataStr = btoa(JSON.stringify(d));
+
+            return `
+                <div class="supreme-card ${cl}" onclick="showDetails('${dataStr}')">
+                    <div class="mov-info">
+                        <span class="mov-item">${d.metodo || d.producto || 'TRANSACCIÓN'}</span>
+                        <span class="mov-date">${d.fecha || 'Procesado'}</span>
+                    </div>
+                    <div class="amount" style="color:${col}">${sym}$${parseFloat(d.monto).toFixed(2)}</div>
+                </div>`;
         }
 
-        window.showDetails = (data) => {
+        window.showDetails = (encoded) => {
+            const d = JSON.parse(atob(encoded));
             document.getElementById('modal-body').innerHTML = `
-                <div class="detail-row"><span class="detail-label">Producto</span><span class="detail-value">${data.product || data.item}</span></div>
-                <div class="detail-row"><span class="detail-label">Monto</span><span class="detail-value">$${data.monto}</span></div>
-                <div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value" style="color:#00ff88">${data.status || 'EXITOSO'}</span></div>
-                ${data.isExample ? '<p style="font-size:8px; color:#f00; margin-top:10px;">* Este es un ticket de previsualización.</p>' : ''}
+                <div class="detail-row"><span class="detail-label">Producto/Método</span><span class="detail-value">${d.metodo || d.producto}</span></div>
+                <div class="detail-row"><span class="detail-label">Referencia</span><span class="detail-value">${d.referencia || 'N/A'}</span></div>
+                <div class="detail-row"><span class="detail-label">Monto</span><span class="detail-value">$${d.monto} USD</span></div>
+                ${d.img ? `<img src="${d.img}" class="ticket-img-preview" onclick="window.open(this.src)">` : ''}
             `;
             document.getElementById('modalInfo').style.display = 'flex';
         };
