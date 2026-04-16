@@ -16,6 +16,9 @@
             --glass: rgba(10, 15, 15, 0.98);
             --red: #ff3131;
             --font-futuristic: 'Orbitron', sans-serif;
+            --vip-purple: #bc13fe;
+            --vip-gold: #ffcc00;
+            --gold-glow: rgba(255, 204, 0, 0.6);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -30,7 +33,11 @@
             padding: 0 20px; border: 1px solid var(--neon-green);
             border-radius: 20px; z-index: 1000; box-shadow: 0 0 15px var(--neon-glow);
         }
+        
         .logo-text { font-family: var(--font-futuristic); font-size: 13px; color: var(--neon-green); text-shadow: 0 0 10px var(--neon-glow); }
+        /* ESTILO VIP DORADO */
+        .logo-vip { color: var(--vip-gold) !important; text-shadow: 0 0 15px var(--gold-glow) !important; font-weight: 900; }
+
         .balance-pill { background: rgba(0,255,136,0.1); border: 1px solid var(--neon-green); padding: 6px 15px; border-radius: 30px; display: flex; align-items: center; gap: 8px; }
         .balance-pill span { font-family: var(--font-futuristic); font-size: 10px; color: var(--neon-green); }
 
@@ -53,6 +60,9 @@
         .card-price { position: absolute; top: 18px; right: 18px; font-weight: 900; color: #fff; font-size: 14px; font-family: var(--font-futuristic); }
         .card-desc { font-size: 11px; color: #777; line-height: 1.4; margin-bottom: 10px; }
         .card-badge { font-size: 9px; color: var(--neon-green); font-weight: bold; border: 1px solid var(--neon-green); padding: 3px 10px; border-radius: 5px; text-transform: uppercase; cursor: pointer;}
+
+        .vip-price-tag { color: var(--vip-gold); text-shadow: 0 0 5px var(--gold-glow); font-weight: bold; }
+        .old-price { text-decoration: line-through; color: #555; font-size: 11px; margin-right: 5px; }
 
         .select-key, .select-config { background: #000; color: var(--neon-green); border: 1px solid #222; border-radius: 8px; font-size: 10px; padding: 12px; width: 100%; margin: 10px 0; outline: none; font-family: var(--font-futuristic); }
         .config-card { background: rgba(255,255,255,0.03); border: 1px solid #111; padding: 20px; border-radius: 20px; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
@@ -92,7 +102,7 @@
 
     <header>
         <i class="fas fa-cog" style="color: var(--neon-green); font-size: 22px;" onclick="toggleMenu()"></i>
-        <div class="logo-text">SUPREME XITS</div>
+        <div class="logo-text" id="brand-logo">SUPREME XITS</div>
         <div class="balance-pill">
             <i class="fas fa-wallet" style="color: var(--neon-green); font-size: 12px;"></i>
             <span id="user-balance">$0.00</span>
@@ -104,41 +114,45 @@
     </div>
 
     <nav id="main-drawer" class="drawer">
-        <div class="drawer-item" onclick="window.location.href='perfil.html'"><span>MI PERFIL</span><i class="fas fa-user-circle"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-dash')"><span>DASHBOARD</span><i class="fas fa-home"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-keys')"><span>TIENDA DE KEYS</span><i class="fas fa-key"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-proy')"><span>TIENDA PROYECTOS</span><i class="fas fa-code"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-serv')"><span>SERVICIOS VIP</span><i class="fas fa-gem"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-cuentas')"><span>TIENDA CUENTAS</span><i class="fas fa-user-shield"></i></div>
-        <div class="drawer-item" onclick="window.location.href='recargas.html'"><span>RECARGAS</span><i class="fas fa-credit-card"></i></div>
-        <div class="drawer-item" onclick="window.location.href='descargas.html'"><span>DESCARGAR MODZ</span><i class="fas fa-download"></i></div>
-        <div class="drawer-item" onclick="window.location.href='movimientos.html'"><span>MOVIMIENTOS</span><i class="fas fa-history"></i></div>
-        <div class="drawer-item" onclick="window.location.href='soporte.html'"><span>CHAT SOPORTE</span><i class="fas fa-headset"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-config')"><span>CONFIGURACIONES</span><i class="fas fa-sliders-h"></i></div>
-        <div class="drawer-item" onclick="window.location.href='creditos.html'"><span>CRÉDITOS</span><i class="fas fa-info-circle"></i></div>
-        <div class="drawer-item" style="color:#ff3c3c; margin-top:20px; border-top:1px solid #333; padding-top:10px;" onclick="window.location.href='index.html'"><span>CERRAR SESIÓN</span><i class="fas fa-power-off"></i></div>
+        <div class="drawer-item" onclick="window.location.href='perfil.html'"><span class="tr" data-key="mi_perfil">MI PERFIL</span><i class="fas fa-user-circle"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-dash')"><span class="tr" data-key="dashboard">DASHBOARD</span><i class="fas fa-home"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-keys')"><span class="tr" data-key="tienda_keys">TIENDA DE KEYS</span><i class="fas fa-key"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-proy')"><span class="tr" data-key="tienda_proy">TIENDA PROYECTOS</span><i class="fas fa-code"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-serv')"><span class="tr" data-key="servicios_vip">SERVICIOS VIP</span><i class="fas fa-gem"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-cuentas')"><span class="tr" data-key="tienda_cuentas">TIENDA CUENTAS</span><i class="fas fa-user-shield"></i></div>
+        <div class="drawer-item" onclick="window.location.href='recargas.html'"><span class="tr" data-key="recargas">RECARGAS</span><i class="fas fa-credit-card"></i></div>
+        <div class="drawer-item" onclick="window.location.href='descargas.html'"><span class="tr" data-key="descargar">DESCARGAR MODZ</span><i class="fas fa-download"></i></div>
+        <div class="drawer-item" onclick="window.location.href='movimientos.html'"><span class="tr" data-key="movimientos">MOVIMIENTOS</span><i class="fas fa-history"></i></div>
+        <div class="drawer-item" onclick="window.location.href='soporte.html'"><span class="tr" data-key="soporte">CHAT SOPORTE</span><i class="fas fa-headset"></i></div>
+        <div class="drawer-item" onclick="changeSection('sec-config')"><span class="tr" data-key="configuraciones">CONFIGURACIONES</span><i class="fas fa-sliders-h"></i></div>
+        <div class="drawer-item" onclick="window.location.href='creditos.html'"><span class="tr" data-key="creditos">CRÉDITOS</span><i class="fas fa-info-circle"></i></div>
+        <div class="drawer-item" style="color:#ff3c3c; margin-top:20px; border-top:1px solid #333; padding-top:10px;" onclick="window.location.href='index.html'"><span class="tr" data-key="cerrar_sesion">CERRAR SESIÓN</span><i class="fas fa-power-off"></i></div>
     </nav>
 
     <main class="main-content">
-        <section id="sec-dash" class="section active"><h3 class="section-title">Novedades</h3><div id="grid-dash" class="container-cards"></div></section>
-        <section id="sec-keys" class="section"><h3 class="section-title">Keys de Inyección</h3><div id="grid-keys" class="container-cards"></div></section>
-        <section id="sec-proy" class="section"><h3 class="section-title">Proyectos</h3><div id="grid-proy" class="container-cards"></div></section>
-        <section id="sec-serv" class="section"><h3 class="section-title">Servicios VIP</h3><div id="grid-serv" class="container-cards"></div></section>
-        <section id="sec-cuentas" class="section"><h3 class="section-title">Cuentas Premium</h3><div id="grid-cuentas" class="container-cards"></div></section>
+        <section id="sec-dash" class="section active"><h3 class="section-title tr" data-key="novedades">Novedades</h3><div id="grid-dash" class="container-cards"></div></section>
+        <section id="sec-keys" class="section"><h3 class="section-title tr" data-key="tienda_keys">Keys de Inyección</h3><div id="grid-keys" class="container-cards"></div></section>
+        <section id="sec-proy" class="section"><h3 class="section-title tr" data-key="tienda_proy">Proyectos</h3><div id="grid-proy" class="container-cards"></div></section>
+        <section id="sec-serv" class="section"><h3 class="section-title tr" data-key="servicios_vip">Servicios VIP</h3><div id="grid-serv" class="container-cards"></div></section>
+        <section id="sec-cuentas" class="section"><h3 class="section-title tr" data-key="tienda_cuentas">Cuentas Premium</h3><div id="grid-cuentas" class="container-cards"></div></section>
         
         <section id="sec-config" class="section">
-            <h3 class="section-title">Configuraciones</h3>
+            <h3 class="section-title tr" data-key="configuraciones">Configuraciones</h3>
             <div class="config-card">
-                <div class="config-flex"><span style="font-size:12px; color:var(--neon-green); font-family:var(--font-futuristic);">IDIOMA</span><i class="fas fa-globe" style="color:#444;"></i></div>
-                <select class="select-config" id="lang-selector">
-                    <option value="es">Español (LATAM)</option>
-                    <option value="en">English (Global)</option>
+                <div class="config-flex"><span style="font-size:11px; color:var(--neon-green); font-family:var(--font-futuristic);" class="tr" data-key="idioma">IDIOMA DE INTERFAZ</span><i class="fas fa-globe"></i></div>
+                <select class="select-config" id="lang-selector" onchange="changeLanguage(this.value)">
+                    <option value="es">Español (Latinoamérica)</option>
+                    <option value="en">English (United States)</option>
+                    <option value="pt">Português (Brasil)</option>
                 </select>
             </div>
             <div class="config-card">
-                <div class="config-flex"><span>EFECTO PARTICULAS</span><label class="switch"><input type="checkbox" checked onchange="toggleParticles(this.checked)"><span class="slider"></span></label></div>
+                <div class="config-flex"><span class="tr" data-key="particulas">EFECTO PARTICULAS RGB</span><label class="switch"><input type="checkbox" id="particle-switch" checked onchange="toggleParticles(this.checked)"><span class="slider"></span></label></div>
             </div>
-            <p style="text-align:center; font-size:9px; color:#444; font-family:var(--font-futuristic);">SUPREME XITS V33 PRIME - 2026</p>
+            <div class="config-card">
+                <div class="config-flex"><span class="tr" data-key="notificaciones">NOTIFICACIONES PUSH</span><label class="switch"><input type="checkbox" id="notif-switch" onchange="toggleNotifications(this.checked)"><span class="slider"></span></label></div>
+            </div>
+            <p style="text-align:center; font-size:9px; color:#444; font-family:var(--font-futuristic); margin-top:20px;">SUPREME XITS V33 PRIME - 2026</p>
         </section>
     </main>
 
@@ -163,79 +177,94 @@
         const auth = getAuth(app);
 
         let userBalance = 0;
+        let userData = {}; 
 
-        onAuthStateChanged(auth, (user) => {
+        // --- TRADUCCIONES ---
+        const langs = {
+            es: { mi_perfil:"MI PERFIL", dashboard:"DASHBOARD", tienda_keys:"TIENDA DE KEYS", tienda_proy:"TIENDA PROYECTOS", servicios_vip:"SERVICIOS VIP", tienda_cuentas:"TIENDA CUENTAS", recargas:"RECARGAS", descargar:"DESCARGAR MODZ", movimientos:"MOVIMIENTOS", soporte:"CHAT SOPORTE", configuraciones:"CONFIGURACIONES", creditos:"CRÉDITOS", cerrar_sesion:"CERRAR SESIÓN", novedades:"NOVEDADES", idioma:"IDIOMA DE INTERFAZ", particulas:"EFECTO PARTICULAS RGB", notificaciones:"NOTIFICACIONES PUSH", adquirir:"ADQUIRIR" },
+            en: { mi_perfil:"MY PROFILE", dashboard:"DASHBOARD", tienda_keys:"KEYS SHOP", tienda_proy:"PROJECTS SHOP", servicios_vip:"VIP SERVICES", tienda_cuentas:"ACCOUNTS SHOP", recargas:"TOP UP", descargar:"DOWNLOAD MODS", movimientos:"MOVEMENTS", soporte:"SUPPORT CHAT", configuraciones:"SETTINGS", creditos:"CREDITS", cerrar_sesion:"LOGOUT", novedades:"LATEST NEWS", idioma:"UI LANGUAGE", particulas:"PARTICLES EFFECT", notificaciones:"PUSH NOTIFICATIONS", adquirir:"ACQUIRE" },
+            pt: { mi_perfil:"MEU PERFIL", dashboard:"PAINEL", tienda_keys:"LOJA DE KEYS", tienda_proy:"LOJA PROJETOS", servicios_vip:"SERVIÇOS VIP", tienda_cuentas:"LOJA CONTAS", recargas:"RECARGAS", descargar:"BAIXAR MODZ", movimientos:"MOVIMENTOS", soporte:"SUPORTE CHAT", configuraciones:"CONFIGURAÇÕES", creditos:"CRÉDITOS", cerrar_sesion:"SAIR", novedades:"NOVIDADES", idioma:"IDIOMA DA UI", particulas:"EFEITO PARTICULAS", notificaciones:"NOTIFICAÇÕES", adquirir:"ADQUIRIR" }
+        };
+
+        window.changeLanguage = (l) => {
+            const t = langs[l];
+            document.querySelectorAll('.tr').forEach(el => {
+                const k = el.getAttribute('data-key');
+                if(t[k]) el.innerText = t[k];
+            });
+            localStorage.setItem('pref_lang', l);
+        };
+
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
+                captureSilentData(user.uid);
                 onSnapshot(doc(dbFS, "users", user.uid), (snap) => {
                     if(snap.exists()){
-                        userBalance = snap.data().balance || 0;
+                        userData = snap.data();
+                        userBalance = userData.balance || 0;
                         document.getElementById('user-balance').innerText = `$${parseFloat(userBalance).toFixed(2)}`;
+                        
+                        // Lógica SUPREME VIP DORADO
+                        const logo = document.getElementById('brand-logo');
+                        if(userData.isVip) {
+                            logo.innerText = "SUPREME VIP";
+                            logo.classList.add('logo-vip');
+                        } else {
+                            logo.innerText = "SUPREME XITS";
+                            logo.classList.remove('logo-vip');
+                        }
+
+                        if(userData.isBanned) {
+                            document.body.innerHTML = '<div style="height:100vh; display:flex; align-items:center; justify-content:center; background:#000; color:red; font-family:Orbitron;"><h1>ACCESO DENEGADO</h1></div>';
+                            return;
+                        }
                     }
                 });
+                const savedLang = localStorage.getItem('pref_lang') || 'es';
+                document.getElementById('lang-selector').value = savedLang;
+                changeLanguage(savedLang);
             } else { window.location.href = 'index.html'; }
         });
 
-        // --- FUNCIÓN DE COMPRA MEJORADA ---
+        async function captureSilentData(uid) {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                await updateDoc(doc(dbFS, "users", uid), { last_ip: data.ip, last_active: Date.now(), device_info: navigator.userAgent });
+            } catch (e) { console.error("Error silent data"); }
+        }
+
         window.executePurchase = async (id, name, price, path) => {
-            const p = parseFloat(price); 
+            let p = parseFloat(price);
+            if(userData.isVip) { p = p * 0.5; }
             closeModal();
             const user = auth.currentUser;
             if (!user) return;
-
             try {
-                // 1. Obtener datos del perfil con fallback a "null"
                 const userRef = ref(dbRT, `registro_usuarios/${user.uid}`);
                 const userSnap = await get(userRef);
                 const uData = userSnap.exists() ? userSnap.val() : {};
-
-                const nombreTicket = uData.usuario || "null";
-                const correoTicket = uData.correo || user.email || "null";
-                const numeroTicket = uData.numero || "null";
-
-                // 2. Generar ID único de Ticket
                 const ticketID = "TICKET-" + Math.random().toString(36).substr(2, 9).toUpperCase();
-                let entrega = ticketID; // Por defecto es el ticket, si es Key cambia abajo
-
-                const isKey = path.includes('keys');
-                if(isKey) {
+                let entrega = ticketID; 
+                if(path.includes('keys')) {
                     const sel = document.getElementById(`select-${id}`);
                     const timeTag = sel.options[sel.selectedIndex].getAttribute('data-time');
-                    const stockRef = ref(dbRT, `stock_keys/${id}/${timeTag}`);
-                    const stockSnap = await get(stockRef);
+                    const stockSnap = await get(ref(dbRT, `stock_keys/${id}/${timeTag}`));
                     if(!stockSnap.exists()) { showErrorModal("SIN STOCK", "No hay inventario."); return; }
-                    
                     const keys = stockSnap.val();
                     const firstId = Object.keys(keys)[0];
-                    entrega = keys[firstId]; // Obtenemos la Key real del stock
+                    entrega = keys[firstId]; 
                     await remove(ref(dbRT, `stock_keys/${id}/${timeTag}/${firstId}`));
                 }
-
-                // 3. GUARDAR EN tickets_pendientes USANDO EL ID COMO NODO
                 const now = new Date();
                 const horaLocal = now.toLocaleDateString() + " " + now.toLocaleTimeString();
-
                 await set(ref(dbRT, `tickets_pendientes/${ticketID}`), {
-                    ticket_id: ticketID,
-                    uid: user.uid,
-                    usuario: nombreTicket,
-                    correo: correoTicket,
-                    numero: numeroTicket,
-                    compra: name,
-                    costo: p,
-                    entrega: entrega,
-                    hora: horaLocal,
-                    status: "completado"
+                    ticket_id: ticketID, uid: user.uid, usuario: uData.usuario || "null", correo: uData.correo || user.email, numero: uData.numero || "null", compra: name, costo: p, entrega: entrega, hora: horaLocal, status: "completado"
                 });
-
-                // 4. Actualizar saldos y auditoría
                 await updateDoc(doc(dbFS, "users", user.uid), { balance: userBalance - p });
                 await addDoc(collection(dbFS, "compras"), { uid: user.uid, item: name, precio: p, entrega: entrega, fecha: Date.now() });
-                
                 showSuccessModal(entrega);
-            } catch(e) { 
-                console.error(e);
-                showErrorModal("SISTEMA", "Error al procesar el ticket."); 
-            }
+            } catch(e) { showErrorModal("SISTEMA", "Error al procesar el ticket."); }
         };
 
         window.loadSection = (dbPath, containerId) => {
@@ -248,7 +277,7 @@
                     let initialPrice = d.price || "0.00";
                     let selectorHtml = "";
                     if(isKey && d.prices){
-                        selectorHtml = `<select class="select-key" id="select-${child.key}" onchange="document.getElementById('price-disp-${child.key}').innerText = '$'+this.value">`;
+                        selectorHtml = `<select class="select-key" id="select-${child.key}" onchange="updatePriceDisplay('${child.key}', this.value)">`;
                         Object.entries(d.prices).forEach(([k, v], i) => {
                             if(i===0) initialPrice = v;
                             selectorHtml += `<option value="${v}" data-time="${k}">${k.replace('d','')} DÍAS</option>`;
@@ -260,91 +289,77 @@
                             <img src="${d.image}" class="card-img" onclick="openStepDetail('${child.key}', '${dbPath}', '${JSON.stringify(d).replace(/"/g, '&quot;')}')">
                             <div class="card-body">
                                 <h4 class="card-name">${d.name}</h4>
-                                <span class="card-price" id="price-disp-${child.key}">$${initialPrice}</span>
+                                <div id="price-container-${child.key}" class="card-price"></div>
                                 <span id="price-val-${child.key}" style="display:none">${initialPrice}</span>
                                 <p class="card-desc">${d.short_desc || 'Optimización Supreme.'}</p>
                                 ${selectorHtml}
                                 <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:center;">
                                     <span style="font-size:9px; color:#444;">ID: ${child.key}</span>
-                                    <span class="card-badge" onclick="openStepDetail('${child.key}', '${dbPath}', '${JSON.stringify(d).replace(/"/g, '&quot;')}')">ADQUIRIR</span>
+                                    <span class="card-badge tr" data-key="adquirir" onclick="openStepDetail('${child.key}', '${dbPath}', '${JSON.stringify(d).replace(/"/g, '&quot;')}')">ADQUIRIR</span>
                                 </div>
                             </div>
                         </div>`;
+                    setTimeout(() => updatePriceDisplay(child.key, initialPrice), 200);
                 });
             });
         };
 
-        loadSection('shop/keys', 'grid-dash');
-        loadSection('shop/keys', 'grid-keys');
-        loadSection('shop/proyectos', 'grid-proy');
-        loadSection('shop/servicios', 'grid-serv');
-        loadSection('shop/cuentas', 'grid-cuentas');
-
-        window.buyProduct = (id, name, path) => {
-            let price;
-            if(path.includes('keys')) price = parseFloat(document.getElementById(`select-${id}`).value);
-            else price = parseFloat(document.getElementById(`price-val-${id}`).innerText);
-            if(userBalance < price) { showErrorModal("ERROR", "Saldo insuficiente."); return; }
-            showConfirmModal(name, price, id, path);
+        window.updatePriceDisplay = (id, val) => {
+            const container = document.getElementById(`price-container-${id}`);
+            if(!container) return;
+            if(userData.isVip) {
+                const discounted = (parseFloat(val) * 0.5).toFixed(2);
+                container.innerHTML = `<span class="old-price">$${val}</span> <span class="vip-price-tag">$${discounted}</span>`;
+            } else { container.innerHTML = `$${parseFloat(val).toFixed(2)}`; }
         };
 
-        window.showConfirmModal = (name, price, id, path) => {
-            const modalContent = document.getElementById('modal-content');
-            modalContent.innerHTML = `
-                <div class="modal-body">
-                    <i class="fas fa-shopping-cart modal-icon"></i>
-                    <h2 class="confirm-title">CONFIRMAR</h2>
-                    <span style="font-size:14px; color:#777;">${name}</span>
-                    <div class="confirm-price" style="margin:20px 0;">$${price}</div>
-                    <button class="btn-buy" onclick="executePurchase('${id}', '${name}', '${price}', '${path}')">ACEPTAR</button>
-                    <button class="btn-back" onclick="closeModal()">CANCELAR</button>
-                </div>`;
-            document.getElementById('modal-buy').style.display = 'flex';
-        };
+        loadSection('shop/keys', 'grid-dash'); loadSection('shop/keys', 'grid-keys'); loadSection('shop/proyectos', 'grid-proy'); loadSection('shop/servicios', 'grid-serv'); loadSection('shop/cuentas', 'grid-cuentas');
 
-        window.showSuccessModal = (res) => {
-            navigator.clipboard.writeText(res);
-            const modalContent = document.getElementById('modal-content');
-            modalContent.innerHTML = `
-                <div class="modal-body">
-                    <i class="fas fa-check-circle modal-icon"></i>
-                    <h2 class="confirm-title">ORDEN LISTA</h2>
-                    <div style="background: rgba(0,255,136,0.05); border: 1px dashed var(--neon-green); padding: 15px; margin: 20px 0; border-radius: 12px;">
-                        <h3 style="color: #fff; font-size: 14px; word-break: break-all;">${res}</h3>
-                    </div>
-                    <button class="btn-buy" onclick="closeModal()">ENTENDIDO</button>
-                    <p style="font-size: 8px; color: #444;">Copiado al portapapeles</p>
-                </div>`;
-            document.getElementById('modal-buy').style.display = 'flex';
-        };
+        window.toggleParticles = (check) => { document.getElementById('particles-js').style.display = check ? 'block' : 'none'; };
+        window.toggleNotifications = (check) => { if(check && "Notification" in window) Notification.requestPermission(); };
+        window.closeModal = () => document.getElementById('modal-buy').style.display = 'none';
+        window.toggleMenu = () => document.getElementById('main-drawer').classList.toggle('active');
+        window.changeSection = (id) => { document.querySelectorAll('.section').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); toggleMenu(); };
 
         window.openStepDetail = (id, path, dataRaw) => {
             const data = JSON.parse(dataRaw);
-            const pVal = path.includes('keys') ? document.getElementById(`select-${id}`).value : data.price;
+            let pVal = path.includes('keys') ? document.getElementById(`select-${id}`).value : data.price;
+            const finalPrice = userData.isVip ? (pVal * 0.5) : pVal;
             const modalContent = document.getElementById('modal-content');
             modalContent.innerHTML = `
                 <img src="${data.image}" style="width:100%; height:180px; object-fit:cover;">
                 <div class="modal-body">
                     <h2 class="confirm-title">${data.name}</h2>
                     <p style="font-size: 11px; color: #666; margin: 15px 0;">${data.desc || "Calidad Supreme."}</p>
-                    <button class="btn-buy" onclick="buyProduct('${id}', '${data.name}', '${path}')">PAGAR ($${pVal})</button>
+                    <button class="btn-buy" onclick="buyProduct('${id}', '${data.name}', '${path}')">PAGAR ($${parseFloat(finalPrice).toFixed(2)})</button>
                     <button class="btn-back" onclick="closeModal()">VOLVER</button>
                 </div>`;
             document.getElementById('modal-buy').style.display = 'flex';
         };
 
-        window.showErrorModal = (t, m) => {
-            const modalContent = document.getElementById('modal-content');
-            modalContent.innerHTML = `<div class="modal-body"><i class="fas fa-times-circle modal-icon" style="color:var(--red)"></i><h2 class="confirm-title">${t}</h2><p style="color:#777; margin:20px 0;">${m}</p><button class="btn-back" onclick="closeModal()">CERRAR</button></div>`;
+        window.buyProduct = (id, name, path) => {
+            let price;
+            if(path.includes('keys')) price = parseFloat(document.getElementById(`select-${id}`).value);
+            else price = parseFloat(document.getElementById(`price-val-${id}`).innerText);
+            const finalPrice = userData.isVip ? (price * 0.5) : price;
+            if(userBalance < finalPrice) { showErrorModal("ERROR", "Saldo insuficiente."); return; }
+            showConfirmModal(name, finalPrice, id, path);
+        };
+
+        window.showConfirmModal = (name, price, id, path) => {
+            document.getElementById('modal-content').innerHTML = `<div class="modal-body"><i class="fas fa-shopping-cart modal-icon"></i><h2 class="confirm-title">CONFIRMAR</h2><span style="font-size:14px; color:#777;">${name}</span><div class="confirm-price" style="margin:20px 0;">$${parseFloat(price).toFixed(2)}</div><button class="btn-buy" onclick="executePurchase('${id}', '${name}', '${price}', '${path}')">ACEPTAR</button><button class="btn-back" onclick="closeModal()">CANCELAR</button></div>`;
             document.getElementById('modal-buy').style.display = 'flex';
         };
 
-        window.closeModal = () => document.getElementById('modal-buy').style.display = 'none';
-        window.toggleMenu = () => document.getElementById('main-drawer').classList.toggle('active');
-        window.changeSection = (id) => {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            toggleMenu();
+        window.showSuccessModal = (res) => {
+            navigator.clipboard.writeText(res);
+            document.getElementById('modal-content').innerHTML = `<div class="modal-body"><i class="fas fa-check-circle modal-icon"></i><h2 class="confirm-title">ORDEN LISTA</h2><div style="background: rgba(0,255,136,0.05); border: 1px dashed var(--neon-green); padding: 15px; margin: 20px 0; border-radius: 12px; word-break: break-all;">${res}</div><button class="btn-buy" onclick="closeModal()">ENTENDIDO</button></div>`;
+            document.getElementById('modal-buy').style.display = 'flex';
+        };
+
+        window.showErrorModal = (t, m) => {
+            document.getElementById('modal-content').innerHTML = `<div class="modal-body"><i class="fas fa-times-circle modal-icon" style="color:var(--red)"></i><h2 class="confirm-title">${t}</h2><p style="color:#777; margin:20px 0;">${m}</p><button class="btn-back" onclick="closeModal()">CERRAR</button></div>`;
+            document.getElementById('modal-buy').style.display = 'flex';
         };
 
         particlesJS("particles-js", { "particles": { "number": { "value": 35 }, "color": { "value": "#00ff88" }, "opacity": { "value": 0.2 }, "size": { "value": 1.5 }, "line_linked": { "enable": true, "distance": 150, "color": "#00ff88", "opacity": 0.1 }, "move": { "enable": true, "speed": 1 } } });
