@@ -1,10 +1,11 @@
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Supreme Xits V33 - Full Store</title>
+    <title id="page-title">Supreme Xits V33 - Full Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -35,7 +36,6 @@
         }
         
         .logo-text { font-family: var(--font-futuristic); font-size: 13px; color: var(--neon-green); text-shadow: 0 0 10px var(--neon-glow); }
-        /* ESTILO VIP DORADO */
         .logo-vip { color: var(--vip-gold) !important; text-shadow: 0 0 15px var(--gold-glow) !important; font-weight: 900; }
 
         .balance-pill { background: rgba(0,255,136,0.1); border: 1px solid var(--neon-green); padding: 6px 15px; border-radius: 30px; display: flex; align-items: center; gap: 8px; }
@@ -50,7 +50,7 @@
         .card-shop {
             background: #080808; width: 100%; max-width: 340px;
             border-radius: 20px; overflow: hidden; position: relative;
-            border: 1px solid rgba(0, 255, 136, 0.2);
+            border: 1px solid var(--neon-green);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             transition: 0.3s;
         }
@@ -92,6 +92,24 @@
         input:checked + .slider { background-color: var(--neon-green); border-color: var(--neon-green); }
         input:checked + .slider:before { transform: translateX(18px); }
 
+        /* ESTILO PANTALLA DE MANTENIMIENTO (EDITABLE) */
+        #maint-screen {
+            position: fixed; inset: 0; background: #000; z-index: 10000;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 30px; font-family: var(--font-futuristic);
+        }
+        .lock-box { position: relative; z-index: 10001; }
+        .lock-title { color: var(--red); font-size: 22px; text-shadow: 0 0 15px rgba(255, 49, 49, 0.5); margin-bottom: 15px; }
+        .lock-msg { font-family: 'Rajdhani'; color: #888; font-size: 14px; margin-bottom: 30px; letter-spacing: 1px; }
+        .lock-timer { font-size: 24px; color: #fff; background: rgba(255,49,49,0.1); border: 1px solid var(--red); padding: 15px 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(255, 49, 49, 0.2); }
+
+        /* ESTILO BANEO INDIVIDUAL (EDITABLE) */
+        #ban-screen {
+            position: fixed; inset: 0; background: #000; z-index: 10002;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; color: var(--red); font-family: var(--font-futuristic);
+        }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
@@ -99,6 +117,22 @@
 <body>
 
     <div id="particles-js"></div>
+
+    <div id="maint-screen">
+        <div class="lock-box">
+            <i class="fas fa-tools" id="maint-icon" style="color: var(--red); font-size: 60px; margin-bottom: 20px;"></i>
+            <h1 class="lock-title" id="maint-title">SERVIDOR EN MANTENIMIENTO</h1>
+            <p class="lock-msg" id="maint-msg">ESTAMOS MEJORANDO LA INFRAESTRUCTURA SUPREME.</p>
+            <div id="timer-display" class="lock-timer">00:00:00:00</div>
+            <p id="maint-footer" style="margin-top: 20px; font-size: 9px; color: #444;">ID DE TERMINAL: WEB-V33-XITS</p>
+        </div>
+    </div>
+
+    <div id="ban-screen">
+        <i class="fas fa-user-slash" id="ban-icon" style="font-size: 80px; margin-bottom: 20px;"></i>
+        <h1 id="ban-title" style="text-shadow: 0 0 20px var(--red);">ACCESO DENEGADO</h1>
+        <p id="ban-msg" style="font-family: 'Rajdhani'; color: #888; margin-top: 10px;">TU CUENTA HA SIDO BLOQUEADA POR VIOLACIÓN DE PROTOCOLOS.</p>
+    </div>
 
     <header>
         <i class="fas fa-cog" style="color: var(--neon-green); font-size: 22px;" onclick="toggleMenu()"></i>
@@ -114,18 +148,18 @@
     </div>
 
     <nav id="main-drawer" class="drawer">
-        <div class="drawer-item" onclick="window.location.href='perfil.html'"><span class="tr" data-key="mi_perfil">MI PERFIL</span><i class="fas fa-user-circle"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-dash')"><span class="tr" data-key="dashboard">DASHBOARD</span><i class="fas fa-home"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-keys')"><span class="tr" data-key="tienda_keys">TIENDA DE KEYS</span><i class="fas fa-key"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-proy')"><span class="tr" data-key="tienda_proy">TIENDA PROYECTOS</span><i class="fas fa-code"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-serv')"><span class="tr" data-key="servicios_vip">SERVICIOS VIP</span><i class="fas fa-gem"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-cuentas')"><span class="tr" data-key="tienda_cuentas">TIENDA CUENTAS</span><i class="fas fa-user-shield"></i></div>
-        <div class="drawer-item" onclick="window.location.href='recargas.html'"><span class="tr" data-key="recargas">RECARGAS</span><i class="fas fa-credit-card"></i></div>
-        <div class="drawer-item" onclick="window.location.href='descargas.html'"><span class="tr" data-key="descargar">DESCARGAR MODZ</span><i class="fas fa-download"></i></div>
-        <div class="drawer-item" onclick="window.location.href='movimientos.html'"><span class="tr" data-key="movimientos">MOVIMIENTOS</span><i class="fas fa-history"></i></div>
-        <div class="drawer-item" onclick="window.location.href='soporte.html'"><span class="tr" data-key="soporte">CHAT SOPORTE</span><i class="fas fa-headset"></i></div>
-        <div class="drawer-item" onclick="changeSection('sec-config')"><span class="tr" data-key="configuraciones">CONFIGURACIONES</span><i class="fas fa-sliders-h"></i></div>
-        <div class="drawer-item" onclick="window.location.href='creditos.html'"><span class="tr" data-key="creditos">CRÉDITOS</span><i class="fas fa-info-circle"></i></div>
+        <div class="drawer-item" id="nav-perfil" onclick="navigate('perfil')"><span class="tr" data-key="mi_perfil">MI PERFIL</span><i class="fas fa-user-circle"></i></div>
+        <div class="drawer-item" id="nav-dash" onclick="changeSection('sec-dash')"><span class="tr" data-key="dashboard">DASHBOARD</span><i class="fas fa-home"></i></div>
+        <div class="drawer-item" id="nav-keys" onclick="changeSection('sec-keys')"><span class="tr" data-key="tienda_keys">TIENDA DE KEYS</span><i class="fas fa-key"></i></div>
+        <div class="drawer-item" id="nav-proy" onclick="changeSection('sec-proy')"><span class="tr" data-key="tienda_proy">TIENDA PROYECTOS</span><i class="fas fa-code"></i></div>
+        <div class="drawer-item" id="nav-serv" onclick="changeSection('sec-serv')"><span class="tr" data-key="servicios_vip">SERVICIOS VIP</span><i class="fas fa-gem"></i></div>
+        <div class="drawer-item" id="nav-cuentas" onclick="changeSection('sec-cuentas')"><span class="tr" data-key="tienda_cuentas">TIENDA CUENTAS</span><i class="fas fa-user-shield"></i></div>
+        <div class="drawer-item" id="nav-recargas" onclick="navigate('recargas')"><span class="tr" data-key="recargas">RECARGAS</span><i class="fas fa-credit-card"></i></div>
+        <div class="drawer-item" id="nav-descargas" onclick="navigate('descargas')"><span class="tr" data-key="descargar">DESCARGAR MODZ</span><i class="fas fa-download"></i></div>
+        <div class="drawer-item" id="nav-movimientos" onclick="navigate('movimientos')"><span class="tr" data-key="movimientos">MOVIMIENTOS</span><i class="fas fa-history"></i></div>
+        <div class="drawer-item" id="nav-soporte" onclick="navigate('soporte')"><span class="tr" data-key="soporte">CHAT SOPORTE</span><i class="fas fa-headset"></i></div>
+        <div class="drawer-item" id="nav-config" onclick="changeSection('sec-config')"><span class="tr" data-key="configuraciones">CONFIGURACIONES</span><i class="fas fa-sliders-h"></i></div>
+        <div class="drawer-item" id="nav-creditos" onclick="navigate('creditos')"><span class="tr" data-key="creditos">CRÉDITOS</span><i class="fas fa-info-circle"></i></div>
         <div class="drawer-item" style="color:#ff3c3c; margin-top:20px; border-top:1px solid #333; padding-top:10px;" onclick="window.location.href='index.html'"><span class="tr" data-key="cerrar_sesion">CERRAR SESIÓN</span><i class="fas fa-power-off"></i></div>
     </nav>
 
@@ -139,7 +173,7 @@
         <section id="sec-config" class="section">
             <h3 class="section-title tr" data-key="configuraciones">Configuraciones</h3>
             <div class="config-card">
-                <div class="config-flex"><span style="font-size:11px; color:var(--neon-green); font-family:var(--font-futuristic);" class="tr" data-key="idioma">IDIOMA DE INTERFAZ</span><i class="fas fa-globe"></i></div>
+                <div class="config-flex"><span style="font-size:11px; color:var(--neon-green); font-family:var(--font-futuristic);" class="tr" data-key="idioma">IDIOMA DE INTERFAZ</span><i class="fas fa-globe" style="color:var(--neon-green)"></i></div>
                 <select class="select-config" id="lang-selector" onchange="changeLanguage(this.value)">
                     <option value="es">Español (Latinoamérica)</option>
                     <option value="en">English (United States)</option>
@@ -152,7 +186,7 @@
             <div class="config-card">
                 <div class="config-flex"><span class="tr" data-key="notificaciones">NOTIFICACIONES PUSH</span><label class="switch"><input type="checkbox" id="notif-switch" onchange="toggleNotifications(this.checked)"><span class="slider"></span></label></div>
             </div>
-            <p style="text-align:center; font-size:9px; color:#444; font-family:var(--font-futuristic); margin-top:20px;">SUPREME XITS V33 PRIME - 2026</p>
+            <p id="footer-text" style="text-align:center; font-size:9px; color:#444; font-family:var(--font-futuristic); margin-top:20px;">SUPREME XITS V33 PRIME - 2026</p>
         </section>
     </main>
 
@@ -178,11 +212,128 @@
 
         let userBalance = 0;
         let userData = {}; 
+        let globalPaths = {};
+        let currentWebName = "SUPREME XITS"; 
+        window.vipDiscountVal = 0.5;
+
+        // --- NAVEGACIÓN DINÁMICA ---
+        window.navigate = (key) => {
+            const path = globalPaths[key] || `${key}.html`;
+            window.location.href = path;
+        };
+
+        // --- LÓGICA DE CONTADOR MANTENIMIENTO ---
+        function startMaintTimer(targetTime) {
+            const end = targetTime || (Date.now() + 2592000000); 
+            const timer = setInterval(() => {
+                const now = Date.now();
+                const diff = end - now;
+                if(diff <= 0) { clearInterval(timer); return; }
+                let d = Math.floor(diff / (24 * 3600 * 1000));
+                let h = Math.floor((diff % (24 * 3600 * 1000)) / (3600 * 1000));
+                let m = Math.floor((diff % (3600 * 1000)) / (60 * 1000));
+                let s = Math.floor((diff % (60 * 1000)) / 1000);
+                document.getElementById('timer-display').innerText = `${d}:${h < 10 ? '0'+h : h}:${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+            }, 1000);
+        }
+
+        // --- BRANDING INTELIGENTE ---
+        function updateBranding() {
+            const logo = document.getElementById('brand-logo');
+            if(userData.isVip) {
+                logo.innerText = `${currentWebName} VIP`;
+                logo.classList.add('logo-vip');
+            } else {
+                logo.innerText = currentWebName;
+                logo.classList.remove('logo-vip');
+            }
+        }
+
+        // --- ESCUCHA DE AJUSTES EN REALTIME DATABASE (AJUSTES GLOBALES) ---
+        onValue(ref(dbRT, 'settings'), (snapshot) => {
+            const cfg = snapshot.val();
+            if(cfg) {
+                // Color Neón y Partículas
+                if(cfg.mainColor) {
+                    document.documentElement.style.setProperty('--neon-green', cfg.mainColor);
+                    document.documentElement.style.setProperty('--neon-glow', cfg.mainColor + '80');
+                    window.refreshParticles(cfg.mainColor);
+                }
+
+                // Sincronizar Nombre de la Web (Admin puede cambiarlo)
+                if(cfg.webName) {
+                    currentWebName = cfg.webName;
+                    updateBranding(); // Llama a la lógica VIP
+                    document.getElementById('page-title').innerText = cfg.webName + " - Full Store";
+                    document.getElementById('footer-text').innerText = cfg.webName + " PRIME - 2026";
+                }
+
+                // Sincronizar Descuento
+                if(cfg.discount) window.vipDiscountVal = (100 - parseFloat(cfg.discount)) / 100;
+                
+                // CONTROL DE MANTENIMIENTO EDITABLE
+                if(cfg.status === 'maint') {
+                    document.getElementById('maint-screen').style.display = 'flex';
+                    if(cfg.maint_config) {
+                        document.getElementById('maint-title').innerText = cfg.maint_config.title || "MANTENIMIENTO";
+                        document.getElementById('maint-msg').innerText = cfg.maint_config.msg || "MEJORANDO...";
+                        if(cfg.maint_config.color) document.getElementById('maint-title').style.color = cfg.maint_config.color;
+                        startMaintTimer(cfg.maint_config.endTime);
+                    }
+                } else {
+                    document.getElementById('maint-screen').style.display = 'none';
+                }
+
+                // BANEO GLOBAL / EDITABLE
+                if(cfg.ban_config) {
+                    document.getElementById('ban-title').innerText = cfg.ban_config.title || "ACCESO DENEGADO";
+                    document.getElementById('ban-msg').innerText = cfg.ban_config.msg || "BLOQUEADO.";
+                    if(cfg.ban_config.color) document.getElementById('ban-screen').style.color = cfg.ban_config.color;
+                }
+
+                // DRAWABLE DINÁMICO (NOMBRES Y RUTAS)
+                if(cfg.drawer) {
+                    const d = cfg.drawer;
+                    if(d.names) {
+                        Object.keys(d.names).forEach(key => {
+                            const el = document.querySelector(`#nav-${key} span`);
+                            if(el) el.innerText = d.names[key];
+                        });
+                    }
+                    if(d.paths) globalPaths = d.paths;
+                }
+            }
+        });
+
+        // --- ALERTA MUNDIAL ---
+        onValue(ref(dbRT, 'global_alert'), (snapshot) => {
+            const alertData = snapshot.val();
+            let alertUI = document.getElementById('global-alert-ui');
+            if(!alertUI) {
+                alertUI = document.createElement('div');
+                alertUI.id = 'global-alert-ui';
+                document.body.appendChild(alertUI);
+            }
+            if(alertData && alertData.active){
+                const colors = { info: 'var(--neon-green)', warning: '#ffcc00', danger: '#ff3131' };
+                const color = colors[alertData.type] || 'var(--neon-green)';
+                alertUI.innerHTML = `
+                    <div style="position:fixed; top:85px; left:20px; right:20px; background:rgba(0,0,0,0.95); border:1px solid ${color}; border-radius:15px; padding:15px; z-index:5000; animation:slideUp 0.5s; box-shadow: 0 0 15px ${color}50; backdrop-filter:blur(10px);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                            <h4 style="color:${color}; font-family:Orbitron; font-size:10px; letter-spacing:1px;">${alertData.title}</h4>
+                            <i class="fas fa-times" onclick="this.parentElement.parentElement.remove()" style="cursor:pointer; color:#777; font-size:12px;"></i>
+                        </div>
+                        <p style="font-size:11px; color:#eee; font-family:Rajdhani;">${alertData.message}</p>
+                    </div>`;
+            } else {
+                if(alertUI) alertUI.remove();
+            }
+        });
 
         // --- TRADUCCIONES ---
         const langs = {
             es: { mi_perfil:"MI PERFIL", dashboard:"DASHBOARD", tienda_keys:"TIENDA DE KEYS", tienda_proy:"TIENDA PROYECTOS", servicios_vip:"SERVICIOS VIP", tienda_cuentas:"TIENDA CUENTAS", recargas:"RECARGAS", descargar:"DESCARGAR MODZ", movimientos:"MOVIMIENTOS", soporte:"CHAT SOPORTE", configuraciones:"CONFIGURACIONES", creditos:"CRÉDITOS", cerrar_sesion:"CERRAR SESIÓN", novedades:"NOVEDADES", idioma:"IDIOMA DE INTERFAZ", particulas:"EFECTO PARTICULAS RGB", notificaciones:"NOTIFICACIONES PUSH", adquirir:"ADQUIRIR" },
-            en: { mi_perfil:"MY PROFILE", dashboard:"DASHBOARD", tienda_keys:"KEYS SHOP", tienda_proy:"PROJECTS SHOP", servicios_vip:"VIP SERVICES", tienda_cuentas:"ACCOUNTS SHOP", recargas:"TOP UP", descargar:"DOWNLOAD MODS", movimientos:"MOVEMENTS", soporte:"SUPPORT CHAT", configuraciones:"SETTINGS", creditos:"CREDITS", cerrar_sesion:"LOGOUT", novedades:"LATEST NEWS", idioma:"UI LANGUAGE", particulas:"PARTICLES EFFECT", notificaciones:"PUSH NOTIFICATIONS", adquirir:"ACQUIRE" },
+            en: { mi_perfil:"MY PROFILE", dashboard:"DASHBOARD", tienda_keys:"KEYS SHOP", tienda_proy:"PROJECTS SHOP", servicios_vip:"VIP SERVICES", tienda_cuentas:"ACCOUNTS SHOP", recargas:"TOP UP", descargar:"DOWNLOAD MODS", movimientos:"MOVEMENTS", soporte:"SUPPORT CHAT", configuraciones:"SETTINGS", creditos:"CREDITS", cerrar_sesion:"LOGOUT", novedades:"LATEST NEWS", idioma:"UI LANGUAGE", particulas:"PARTICLES EFFECT", notificaciones:"PUSH NOTIFICATIONS", adquirir:"BUY NOW" },
             pt: { mi_perfil:"MEU PERFIL", dashboard:"PAINEL", tienda_keys:"LOJA DE KEYS", tienda_proy:"LOJA PROJETOS", servicios_vip:"SERVIÇOS VIP", tienda_cuentas:"LOJA CONTAS", recargas:"RECARGAS", descargar:"BAIXAR MODZ", movimientos:"MOVIMENTOS", soporte:"SUPORTE CHAT", configuraciones:"CONFIGURAÇÕES", creditos:"CRÉDITOS", cerrar_sesion:"SAIR", novedades:"NOVIDADES", idioma:"IDIOMA DA UI", particulas:"EFEITO PARTICULAS", notificaciones:"NOTIFICAÇÕES", adquirir:"ADQUIRIR" }
         };
 
@@ -195,6 +346,7 @@
             localStorage.setItem('pref_lang', l);
         };
 
+        // --- ESTADO DEL USUARIO (BANEO INDIVIDUAL) ---
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 captureSilentData(user.uid);
@@ -204,20 +356,15 @@
                         userBalance = userData.balance || 0;
                         document.getElementById('user-balance').innerText = `$${parseFloat(userBalance).toFixed(2)}`;
                         
-                        // Lógica SUPREME VIP DORADO
-                        const logo = document.getElementById('brand-logo');
-                        if(userData.isVip) {
-                            logo.innerText = "SUPREME VIP";
-                            logo.classList.add('logo-vip');
+                        // Si está baneado individualmente se muestra la pantalla editable
+                        if(userData.isBanned) {
+                            document.getElementById('ban-screen').style.display = 'flex';
+                            return;
                         } else {
-                            logo.innerText = "SUPREME XITS";
-                            logo.classList.remove('logo-vip');
+                            document.getElementById('ban-screen').style.display = 'none';
                         }
 
-                        if(userData.isBanned) {
-                            document.body.innerHTML = '<div style="height:100vh; display:flex; align-items:center; justify-content:center; background:#000; color:red; font-family:Orbitron;"><h1>ACCESO DENEGADO</h1></div>';
-                            return;
-                        }
+                        updateBranding(); // Aplica lógica Manuel VIP
                     }
                 });
                 const savedLang = localStorage.getItem('pref_lang') || 'es';
@@ -236,14 +383,11 @@
 
         window.executePurchase = async (id, name, price, path) => {
             let p = parseFloat(price);
-            if(userData.isVip) { p = p * 0.5; }
+            if(userData.isVip) { p = p * window.vipDiscountVal; }
             closeModal();
             const user = auth.currentUser;
             if (!user) return;
             try {
-                const userRef = ref(dbRT, `registro_usuarios/${user.uid}`);
-                const userSnap = await get(userRef);
-                const uData = userSnap.exists() ? userSnap.val() : {};
                 const ticketID = "TICKET-" + Math.random().toString(36).substr(2, 9).toUpperCase();
                 let entrega = ticketID; 
                 if(path.includes('keys')) {
@@ -259,7 +403,7 @@
                 const now = new Date();
                 const horaLocal = now.toLocaleDateString() + " " + now.toLocaleTimeString();
                 await set(ref(dbRT, `tickets_pendientes/${ticketID}`), {
-                    ticket_id: ticketID, uid: user.uid, usuario: uData.usuario || "null", correo: uData.correo || user.email, numero: uData.numero || "null", compra: name, costo: p, entrega: entrega, hora: horaLocal, status: "completado"
+                    ticket_id: ticketID, uid: user.uid, usuario: userData.username || "null", correo: user.email, compra: name, costo: p, entrega: entrega, hora: horaLocal, status: "completado"
                 });
                 await updateDoc(doc(dbFS, "users", user.uid), { balance: userBalance - p });
                 await addDoc(collection(dbFS, "compras"), { uid: user.uid, item: name, precio: p, entrega: entrega, fecha: Date.now() });
@@ -308,7 +452,7 @@
             const container = document.getElementById(`price-container-${id}`);
             if(!container) return;
             if(userData.isVip) {
-                const discounted = (parseFloat(val) * 0.5).toFixed(2);
+                const discounted = (parseFloat(val) * window.vipDiscountVal).toFixed(2);
                 container.innerHTML = `<span class="old-price">$${val}</span> <span class="vip-price-tag">$${discounted}</span>`;
             } else { container.innerHTML = `$${parseFloat(val).toFixed(2)}`; }
         };
@@ -324,7 +468,7 @@
         window.openStepDetail = (id, path, dataRaw) => {
             const data = JSON.parse(dataRaw);
             let pVal = path.includes('keys') ? document.getElementById(`select-${id}`).value : data.price;
-            const finalPrice = userData.isVip ? (pVal * 0.5) : pVal;
+            const finalPrice = userData.isVip ? (pVal * window.vipDiscountVal) : pVal;
             const modalContent = document.getElementById('modal-content');
             modalContent.innerHTML = `
                 <img src="${data.image}" style="width:100%; height:180px; object-fit:cover;">
@@ -341,7 +485,7 @@
             let price;
             if(path.includes('keys')) price = parseFloat(document.getElementById(`select-${id}`).value);
             else price = parseFloat(document.getElementById(`price-val-${id}`).innerText);
-            const finalPrice = userData.isVip ? (price * 0.5) : price;
+            const finalPrice = userData.isVip ? (price * window.vipDiscountVal) : price;
             if(userBalance < finalPrice) { showErrorModal("ERROR", "Saldo insuficiente."); return; }
             showConfirmModal(name, finalPrice, id, path);
         };
@@ -362,7 +506,11 @@
             document.getElementById('modal-buy').style.display = 'flex';
         };
 
-        particlesJS("particles-js", { "particles": { "number": { "value": 35 }, "color": { "value": "#00ff88" }, "opacity": { "value": 0.2 }, "size": { "value": 1.5 }, "line_linked": { "enable": true, "distance": 150, "color": "#00ff88", "opacity": 0.1 }, "move": { "enable": true, "speed": 1 } } });
+        window.refreshParticles = (newColor) => {
+            particlesJS("particles-js", { "particles": { "number": { "value": 35 }, "color": { "value": newColor }, "opacity": { "value": 0.2 }, "size": { "value": 1.5 }, "line_linked": { "enable": true, "distance": 150, "color": newColor, "opacity": 0.1 }, "move": { "enable": true, "speed": 1 } } });
+        };
+
+        window.refreshParticles("#00ff88");
     </script>
 </body>
 </html>
