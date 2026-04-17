@@ -4,12 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Recargas Premium - Supreme Xits</title>
+    <title id="page-title">Recargas Premium - Supreme Xits</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root { --neon: #00ff88; --bg-card: #0c0c0c; --grad: linear-gradient(90deg, #f093fb 0%, #f5576c 100%); }
+        :root { 
+            --neon: #00ff88; 
+            --neon-glow: rgba(0, 255, 136, 0.5);
+            --bg-card: #0c0c0c; 
+            --grad: linear-gradient(90deg, #f093fb 0%, #f5576c 100%); 
+            --red: #ff3131;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
         body { background: #000; color: #fff; font-family: 'Rajdhani', sans-serif; overflow-x: hidden; }
         #particles-js { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
@@ -44,9 +50,30 @@
         .section { display: none; }
         .active { display: block; animation: fadeIn 0.4s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ESTILOS DE BLOQUEO */
+        #maint-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; font-family: 'Orbitron'; }
+        #ban-screen { position: fixed; inset: 0; background: #000; z-index: 10002; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--red); font-family: 'Orbitron'; }
+        .lock-timer { font-size: 24px; color: #fff; background: rgba(255,49,49,0.1); border: 1px solid var(--red); padding: 15px 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(255, 49, 49, 0.2); }
     </style>
 </head>
 <body>
+
+    <div id="maint-screen">
+        <div class="lock-box">
+            <i class="fas fa-tools" id="maint-icon" style="color: var(--red); font-size: 60px; margin-bottom: 20px;"></i>
+            <h1 id="maint-title" style="color: var(--red); font-size: 22px; margin-bottom: 15px;">MANTENIMIENTO</h1>
+            <p id="maint-msg" style="font-family: 'Rajdhani'; color: #888; font-size: 14px; margin-bottom: 30px;">ESTAMOS MEJORANDO LA SECCIÓN DE PAGOS.</p>
+            <div id="timer-display" class="lock-timer">00:00:00:00</div>
+        </div>
+    </div>
+
+    <div id="ban-screen">
+        <i class="fas fa-user-slash" style="font-size: 80px; margin-bottom: 20px;"></i>
+        <h1 id="ban-title">ACCESO DENEGADO</h1>
+        <p id="ban-msg" style="font-family: 'Rajdhani'; color: #888; margin-top: 10px;">TU CUENTA HA SIDO BLOQUEADA POR EL SISTEMA.</p>
+    </div>
+
     <div id="particles-js"></div>
     
     <div class="container">
@@ -156,14 +183,72 @@
         let selM = null;
         let b64 = "";
 
+        // LÓGICA DE CONTADOR MANTENIMIENTO
+        function startMaintTimer(targetTime) {
+            const timer = setInterval(() => {
+                const diff = targetTime - Date.now();
+                if(diff <= 0) { clearInterval(timer); return; }
+                let d = Math.floor(diff / (24 * 3600 * 1000));
+                let h = Math.floor((diff % (24 * 3600 * 1000)) / (3600 * 1000));
+                let m = Math.floor((diff % (3600 * 1000)) / (60 * 1000));
+                let s = Math.floor((diff % (60 * 1000)) / 1000);
+                document.getElementById('timer-display').innerText = `${d}:${h < 10 ? '0'+h : h}:${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+            }, 1000);
+        }
+
+        // ESCUCHA DE AJUSTES GLOBALES (RTDB)
+        onValue(ref(dbRT, 'settings'), (snapshot) => {
+            const cfg = snapshot.val();
+            if(cfg) {
+                // Sincronizar Color y Branding
+                if(cfg.mainColor) {
+                    document.documentElement.style.setProperty('--neon', cfg.mainColor);
+                    document.documentElement.style.setProperty('--neon-glow', cfg.mainColor + '80');
+                }
+                if(cfg.webName) {
+                    document.getElementById('page-title').innerText = "Recargas - " + cfg.webName;
+                }
+
+                // CONTROL DE MANTENIMIENTO (GLOBAL O RECARGAS)
+                if(cfg.status === 'maint' || cfg.status_recargas === 'maint') {
+                    document.getElementById('maint-screen').style.display = 'flex';
+                    if(cfg.maint_config) {
+                        document.getElementById('maint-title').innerText = cfg.maint_config.title || "MANTENIMIENTO";
+                        document.getElementById('maint-msg').innerText = cfg.maint_config.msg || "MEJORANDO...";
+                        if(cfg.maint_config.color) document.getElementById('maint-title').style.color = cfg.maint_config.color;
+                        startMaintTimer(cfg.maint_config.endTime);
+                    }
+                } else {
+                    document.getElementById('maint-screen').style.display = 'none';
+                }
+
+                // BANEO GLOBAL EDITABLE
+                if(cfg.ban_config) {
+                    document.getElementById('ban-title').innerText = cfg.ban_config.title || "ACCESO DENEGADO";
+                    document.getElementById('ban-msg').innerText = cfg.ban_config.msg || "BLOQUEADO.";
+                    if(cfg.ban_config.color) document.getElementById('ban-screen').style.color = cfg.ban_config.color;
+                }
+            }
+        });
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 onSnapshot(doc(dbFS, "users", user.uid), (snap) => {
                     if(snap.exists()){
-                        const bal = snap.data().balance || 0;
+                        const userData = snap.data();
+                        const bal = userData.balance || 0;
                         document.getElementById('top-balance').innerText = `$${parseFloat(bal).toFixed(2)}`;
+                        
+                        // VERIFICACIÓN DE BANEO INDIVIDUAL (FIRESTORE)
+                        if(userData.isBanned) {
+                            document.getElementById('ban-screen').style.display = 'flex';
+                        } else {
+                            document.getElementById('ban-screen').style.display = 'none';
+                        }
                     }
                 });
+            } else {
+                window.location.href = 'index.html';
             }
         });
 
