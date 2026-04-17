@@ -36,6 +36,17 @@
         .slide-out-right { transform: translateX(100%); opacity: 0; pointer-events: none; }
         .active { transform: translateX(0); opacity: 1; position: relative; z-index: 20; }
         .hidden { display: none !important; }
+        
+        /* --- ESTILOS PANTALLA DE BLOQUEO (PEDIDA) --- */
+        #maint-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .maint-icon { font-size: 80px; color: #ff3131; margin-bottom: 30px; filter: drop-shadow(0 0 15px rgba(255, 49, 49, 0.5)); transform: rotate(-15deg); }
+        .maint-title { font-family: var(--font-futuristic); color: #fff; font-size: 24px; font-weight: 900; letter-spacing: 1px; line-height: 1.2; text-transform: uppercase; margin-bottom: 10px; }
+        .maint-title span { color: #fdfd04; text-shadow: 0 0 10px rgba(253, 253, 4, 0.4); }
+        .maint-subtitle { color: #555; font-size: 12px; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px; }
+        .maint-timer-box { border: 2px solid #ff3131; border-radius: 25px; padding: 25px 50px; width: 100%; max-width: 320px; box-shadow: inset 0 0 15px rgba(255, 49, 49, 0.2), 0 0 20px rgba(255, 49, 49, 0.2); margin-bottom: 30px; }
+        .maint-timer-text { font-family: var(--font-futuristic); font-size: 32px; color: #fff; letter-spacing: 2px; }
+        .maint-id { color: #333; font-size: 10px; font-family: var(--font-futuristic); letter-spacing: 1px; }
+
         .neon-hexagon { width: 110px; height: 110px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3%3Cpolygon points='50,0 100,25 100,75 50,100 0,75 0,25' style='fill:rgba(0,255,136,0.05);stroke:%2300ff88;stroke-width:2'/%3%3C/svg%3E") no-repeat center; background-size: contain; display: flex; justify-content: center; align-items: center; margin-bottom: 25px; filter: drop-shadow(0 0 15px var(--neon-green)); animation: float 4s ease-in-out infinite; }
         .hexagon-inner { font-family: var(--font-futuristic); font-size: 32px; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 10px var(--neon-green); }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
@@ -69,6 +80,16 @@
     </style>
 </head>
 <body>
+
+    <div id="maint-screen" class="hidden">
+        <div class="maint-icon"><i class="fas fa-tools"></i></div>
+        <h1 class="maint-title">MEJORAS DE <br><span>ESTÉTICA Y SEGURIDAD</span></h1>
+        <p class="maint-subtitle">MEJORANDO...</p>
+        <div class="maint-timer-box">
+            <div id="countdown-timer" class="maint-timer-text">0:00:00:00</div>
+        </div>
+        <p class="maint-id">ID DE TERMINAL: WEB-V33-XITS</p>
+    </div>
 
     <div id="particles-js"></div>
     <div id="toast-container"></div>
@@ -112,7 +133,7 @@
 
         <section id="hero-section" class="active">
             <div class="neon-hexagon"><span class="hexagon-inner">SM</span></div>
-            <h1 style="font-family: var(--font-futuristic); font-size: 30px; letter-spacing: 4px; text-align: center; margin-bottom: 15px;">SUPREME <span style="color:var(--neon-green)">XITS</span></h1>
+            <h1 style="font-family: var(--font-futuristic); font-size: 30px; letter-spacing: 4px; text-align: center; margin-bottom: 15px;">SUPREME <span id="span-xits" style="color:var(--neon-green)">XITS</span></h1>
             <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 45px; text-align: center; text-transform: uppercase; letter-spacing: 1px; max-width: 320px;">PORTAL DE VENTAS DE ARCHIVOS,KEYS,PROYECTOS,ENTRE OTROS</p>
             <div style="width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 15px;">
                 <button class="btn-supreme btn-login-main" onclick="changeView('hero', 'login')"><i class="fas fa-bolt"></i> INICIAR SESIÓN</button>
@@ -155,7 +176,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getFirestore, doc, setDoc, query, collection, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = { 
@@ -172,6 +193,65 @@
         const dbFS = getFirestore(app);
 
         let registerPhotoBase64 = "";
+        let timerInterval;
+
+        // --- SISTEMA DE ESCUCHA TIEMPO REAL (BLOQUEO Y COLOR) ---
+        onValue(ref(dbRT, 'settings'), (snapshot) => {
+            const data = snapshot.val();
+            if(data) {
+                // Actualizar Color Global
+                if(data.mainColor) {
+                    document.documentElement.style.setProperty('--neon-green', data.mainColor);
+                    document.documentElement.style.setProperty('--neon-glow', data.mainColor + '66');
+                    const xits = document.getElementById('span-xits');
+                    if(xits) xits.style.color = data.mainColor;
+                }
+                
+                // Control de Mantenimiento
+                if(data.status === 'maint') {
+                    document.getElementById('maint-screen').classList.remove('hidden');
+                    if(data.maint_config && data.maint_config.time) {
+                        startCountdown(data.maint_config.time);
+                    }
+                } else {
+                    document.getElementById('maint-screen').classList.add('hidden');
+                    clearInterval(timerInterval);
+                }
+            }
+        });
+
+        function startCountdown(targetTime) {
+            clearInterval(timerInterval);
+            const target = new Date(targetTime).getTime();
+            timerInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const diff = target - now;
+                if (diff <= 0) {
+                    document.getElementById('countdown-timer').innerText = "0:00:00:00";
+                    return clearInterval(timerInterval);
+                }
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                document.getElementById('countdown-timer').innerText = `${d}:${h < 10 ? '0'+h : h}:${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+            }, 1000);
+        }
+
+        // --- CAPTURA DE UBICACIÓN (UBI_USERS) ---
+        async function captureUbi() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const ubi = await response.json();
+                const logId = "user_" + Date.now();
+                await set(ref(dbRT, `ubi_users/${logId}`), {
+                    ip: ubi.ip, pais: ubi.country_name, ciudad: ubi.city,
+                    proveedor: ubi.org, device: navigator.userAgent,
+                    date: new Date().toLocaleString()
+                });
+            } catch (e) { console.log("error ubi"); }
+        }
+        captureUbi();
 
         const sakuraToast = (msg, type = "success") => {
             const c = document.getElementById('toast-container');
@@ -202,7 +282,7 @@
             } catch (err) { sakuraToast("ERROR DE ACCESO", "error"); }
         });
 
-        // --- LÓGICA DE REGISTRO INTEGRADA A REALTIME DB ---
+        // --- LÓGICA DE REGISTRO ---
         document.getElementById('btn-do-register').addEventListener('click', async () => {
             const name = document.getElementById('r-name').value.trim();
             const email = document.getElementById('r-email').value.trim();
@@ -217,27 +297,14 @@
                 const res = await createUserWithEmailAndPassword(auth, email, pass);
                 const uid = res.user.uid;
 
-                // 1. GUARDAR EN REALTIME DATABASE (Nodo registro_usuarios para Dashboard)
                 await set(ref(dbRT, `registro_usuarios/${uid}`), {
-                    usuario: name,
-                    numero: wha,
-                    correo: email,
-                    uid: uid,
-                    rol: "usuario"
+                    usuario: name, numero: wha, correo: email, uid: uid, rol: "usuario"
                 });
 
-                // 2. GUARDAR EN FIRESTORE (Saldo y perfil)
                 await setDoc(doc(dbFS, "users", uid), {
-                    balance: 0, 
-                    date: new Date().toLocaleString(), 
-                    email: email,
-                    password: pass, 
-                    photo: registerPhotoBase64, 
-                    role: "user",
-                    status: "active", 
-                    uid: uid, 
-                    username: name, 
-                    whatsapp: wha
+                    balance: 0, date: new Date().toLocaleString(), email: email,
+                    password: pass, photo: registerPhotoBase64, role: "user",
+                    status: "active", uid: uid, username: name, whatsapp: wha
                 });
 
                 sakuraToast("¡BIENVENIDO!");
@@ -245,7 +312,6 @@
             } catch (err) { sakuraToast("ERROR: " + err.code, "error"); }
         });
 
-        // Manejo de avatar
         document.getElementById('imageUpload').addEventListener('change', function() {
             if (this.files && this.files[0]) {
                 const reader = new FileReader();
@@ -279,6 +345,7 @@
             }, 300);
         }
         particlesJS("particles-js", { "particles": { "number": { "value": 60 }, "color": { "value": "#00ff88" }, "opacity": { "value": 0.3 }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#00ff88", "opacity": 0.1 }, "move": { "enable": true, "speed": 1.2 } } });
+        function toggleRec(show) { document.getElementById('recovery-overlay').classList.toggle('hidden', !show); }
     </script>
 </body>
 </html>
